@@ -19,15 +19,23 @@ float score(const std::string& scorerType,
   scorer->setReferenceFiles(refFiles);
 
   std::string hyp;
-  MosesTuning::ScoreStats scoreStats;
-  size_t sid = 0;
+  MosesTuning::ScoreStats sentStats;
+  std::vector<float> corpStats;
 
+  size_t sid = 0;
   while (getline(candidate, hyp)) {
-    scorer->prepareStats(sid, hyp, scoreStats);
+    scorer->prepareStats(sid, hyp, sentStats);
+
+    if (corpStats.size() == 0) {
+      corpStats = std::vector<float>(sentStats.getArray(), sentStats.getArray() + sentStats.size());
+    } else {
+      for (size_t i = 0; i < sentStats.size(); ++i) {
+        corpStats[i] += sentStats.get(i);
+      }
+    }
+
     ++sid;
   }
 
-  std::vector<float> stats(scoreStats.getArray(),
-                           scoreStats.getArray() + scoreStats.size());
-  return scorer->calculateScore(stats);
+  return scorer->calculateScore(corpStats);
 }

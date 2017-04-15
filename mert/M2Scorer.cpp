@@ -20,7 +20,7 @@ M2Scorer::M2Scorer(const string& config)
     max_unchanged_words_(Scan<int>(getConfig("max_unchanged_words", "2"))),
     truecase_(Scan<bool>(getConfig("truecase", "false"))),
     verbose_(Scan<bool>(getConfig("verbose", "false"))),
-    m2_(max_unchanged_words_, beta_, truecase_)
+    m2_(max_unchanged_words_, beta_, truecase_, verbose_)
 {}
 
 void M2Scorer::setReferenceFiles(const vector<string>& referenceFiles)
@@ -70,10 +70,10 @@ float M2Scorer::calculateScore(const vector<ScoreStatsType>& comps) const
     f = 0.0;
 
   if(verbose_)
-    std::cerr << comps[0] << " " << comps[1] << " " << comps[2] << std::endl;
+    std::cerr << "comps= "<< comps[0] << " " << comps[1] << " " << comps[2] << std::endl;
 
   if(verbose_)
-    std::cerr << p << " " << r << " " << f << std::endl;
+    std::cerr << "p=" << p << " r=" << r << " f=" << f << std::endl;
 
   return f;
 }

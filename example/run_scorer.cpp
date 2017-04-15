@@ -3,14 +3,15 @@
 
 int main(int argc, char **argv) {
   if (argc == 1) {
-    std::cerr << "Usage: ./run-scorer sctype ref1 < candidate > scores" << std::endl;
+    std::cerr << "Usage: ./run-scorer sctype scconfig ref1 [ref2...] < candidate > score" << std::endl;
     return 1;
   }
 
   std::string sctype = argv[1];
-  std::vector<std::string> refFiles(argv + 2, argv + argc);
+  std::string scconfig = argv[2];
+  std::vector<std::string> refFiles(argv + 3, argv + argc);
 
-  std::cout << score(sctype, refFiles, std::cin) << std::endl;
+  std::cout << score(sctype, refFiles, std::cin, scconfig) << std::endl;
 
   return 0;
 }
