@@ -54,6 +54,7 @@ set(MERT_SOURCES
     Permutation.cpp
     PermutationScorer.cpp
     StatisticsBasedScorer.cpp
+    GleuScorer.cpp
 )
 
 add_library(mert OBJECT ${MERT_SOURCES})

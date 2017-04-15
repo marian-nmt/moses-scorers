@@ -12,6 +12,7 @@
 #include "PermutationScorer.h"
 #include "MeteorScorer.h"
 #include "M2Scorer.h"
+#include "GleuScorer.h"
 #include "HwcmScorer.h"
 #include "Reference.h"
 
@@ -58,6 +59,8 @@ Scorer* ScorerFactory::getScorer(const string& type, const string& config)
     return new SemposScorer(config);
   } else if (type == "M2SCORER") {
     return new M2Scorer(config);
+  } else if (type == "GLEU") {
+    return new GleuScorer(config);
   } else if ((type == "HAMMING") || (type == "KENDALL")) {
     return (PermutationScorer*) new PermutationScorer(type, config);
   } else if (type == "METEOR") {

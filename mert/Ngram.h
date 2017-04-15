@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include <boost/unordered_map.hpp>
 
@@ -47,6 +48,13 @@ public:
    * If not, we insert the default count in the container. */
   inline void Add(const Key& ngram) {
     m_counts[ngram]++;
+  }
+
+  /**
+   * Adds "ngram" with given counts.
+   */
+  inline void Add(const Key& ngram, Value v) {
+    m_counts[ngram] += v;
   }
 
   /**
