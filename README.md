@@ -9,3 +9,5 @@ Compilation:
     cd build
     cmake ..
     make -j
+
+An example usage can be found in `example` directory.
