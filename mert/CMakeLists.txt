@@ -1,4 +1,4 @@
-add_library(mert OBJECT
+set(MERT_SOURCES
     Util.cpp
     GzFileBuf.cpp
     FileStream.cpp
@@ -55,3 +55,10 @@ add_library(mert OBJECT
     PermutationScorer.cpp
     StatisticsBasedScorer.cpp
 )
+
+add_library(mert OBJECT ${MERT_SOURCES})
+
+if(ENABLE_TESTS)
+    add_library(mertlib SHARED ${MERT_SOURCES})
+    target_link_libraries(mertlib utillib)
+endif(ENABLE_TESTS)

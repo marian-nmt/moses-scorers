@@ -1,12 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
-
 project(mosesscorers C CXX)
 
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+option(ENABLE_TESTS "Enable unit testing." ON)
+message(STATUS "Enable unit tests: ${ENABLE_TESTS}")
 
-SET(CMAKE_CXX_FLAGS " -std=c++11 -g -O3 -Wno-unused-result -Wno-deprecated -fPIC")
+set(CMAKE_CXX_FLAGS " -std=c++11 -g -O3 -Wno-unused-result -Wno-deprecated -fPIC")
 
 find_package(ZLIB)
 if(ZLIB_FOUND)
@@ -31,6 +29,11 @@ include_directories(${CMAKE_SOURCE_DIR}/mert)
 
 add_subdirectory(util)
 add_subdirectory(mert)
+
+if(ENABLE_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif(ENABLE_TESTS)
 
 add_library(mosesscorers STATIC
     moses_scorers.cpp

@@ -1,4 +1,4 @@
-add_library(util OBJECT
+set(UTIL_SOURCES
   double-conversion/bignum.cc
   double-conversion/cached-powers.cc
   double-conversion/double-conversion.cc
@@ -7,7 +7,6 @@ add_library(util OBJECT
   double-conversion/diy-fp.cc
   double-conversion/fast-dtoa.cc
   double-conversion/strtod.cc
-
   bit_packing.cc
   exception.cc
   float_to_string.cc
@@ -25,3 +24,9 @@ add_library(util OBJECT
   parallel_read.cc
   string_piece.cc
 )
+
+add_library(util OBJECT ${UTIL_SOURCES})
+
+if(ENABLE_TESTS)
+    add_library(utillib SHARED ${UTIL_SOURCES})
+endif(ENABLE_TESTS)
