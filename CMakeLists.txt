@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(moses_scorers C CXX)
+project(mosesscorers C CXX)
 
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -32,7 +32,7 @@ include_directories(${CMAKE_SOURCE_DIR}/mert)
 add_subdirectory(util)
 add_subdirectory(mert)
 
-add_library(moses_scorers STATIC
+add_library(mosesscorers STATIC
     moses_scorers.cpp
     $<TARGET_OBJECTS:mert>
     $<TARGET_OBJECTS:util>
