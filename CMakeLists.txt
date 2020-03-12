@@ -30,11 +30,6 @@ include_directories(${CMAKE_SOURCE_DIR}/mert)
 add_subdirectory(util)
 add_subdirectory(mert)
 
-if(ENABLE_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
-endif(ENABLE_TESTS)
-
 add_library(mosesscorers STATIC
     moses_scorers.cpp
     $<TARGET_OBJECTS:mert>

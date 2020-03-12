@@ -24,23 +24,25 @@ void Exception::SetLocation(const char *file, unsigned int line, const char *fun
    * them down.
    */
   std::string old_text;
+  std::stringstream whatss;
   what_.swap(old_text);
-  what_ << file << ':' << line;
-  if (func) what_ << " in " << func << " threw ";
+  whatss << file << ':' << line;
+  if (func) whatss << " in " << func << " threw ";
   if (child_name) {
-    what_ << child_name;
+    whatss << child_name;
   } else {
 #ifdef __GXX_RTTI
-    what_ << typeid(this).name();
+    whatss << typeid(this).name();
 #else
-    what_ << "an exception";
+    whatss << "an exception";
 #endif
   }
   if (condition) {
-    what_ << " because `" << condition << '\'';
+    whatss << " because `" << condition << '\'';
   }
-  what_ << ".\n";
-  what_ << old_text;
+  whatss << ".\n";
+  whatss << old_text;
+  what_ = whatss.str();
 }
 
 namespace {

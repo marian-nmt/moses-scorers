@@ -12,8 +12,6 @@
 #include "Ngram.h"
 #include "Reference.h"
 #include "Util.h"
-#include "ScoreDataIterator.h"
-#include "FeatureDataIterator.h"
 #include "Vocabulary.h"
 
 using namespace std;
@@ -297,46 +295,5 @@ float sentenceLevelBackgroundBleu(const std::vector<float>& sent, const std::vec
   // Exponentiate and scale by reference length (as per Chiang et al 08)
   return exp(logbleu) * stats[kBleuNgramOrder*2];
 }
-
-vector<float> BleuScorer::ScoreNbestList(const string& scoreFile, const string& featureFile)
-{
-  vector<string> scoreFiles;
-  vector<string> featureFiles;
-  scoreFiles.push_back(scoreFile);
-  featureFiles.push_back(featureFile);
-
-  vector<FeatureDataIterator> featureDataIters;
-  vector<ScoreDataIterator> scoreDataIters;
-  for (size_t i = 0; i < featureFiles.size(); ++i) {
-    featureDataIters.push_back(FeatureDataIterator(featureFiles[i]));
-    scoreDataIters.push_back(ScoreDataIterator(scoreFiles[i]));
-  }
-
-  vector<pair<size_t,size_t> > hypotheses;
-  UTIL_THROW_IF2(featureDataIters[0] == FeatureDataIterator::end(),
-                 "At the end of feature data iterator");
-  for (size_t i = 0; i < featureFiles.size(); ++i) {
-    UTIL_THROW_IF2(featureDataIters[i] == FeatureDataIterator::end(),
-                   "Feature file " << i << " ended prematurely");
-    UTIL_THROW_IF2(scoreDataIters[i] == ScoreDataIterator::end(),
-                   "Score file " << i << " ended prematurely");
-    UTIL_THROW_IF2(featureDataIters[i]->size() != scoreDataIters[i]->size(),
-                   "Features and scores have different size");
-    for (size_t j = 0; j < featureDataIters[i]->size(); ++j) {
-      hypotheses.push_back(pair<size_t,size_t>(i,j));
-    }
-  }
-
-  // score the nbest list
-  vector<float> bleuScores;
-  for (size_t i=0; i < hypotheses.size(); ++i) {
-    pair<size_t,size_t> translation = hypotheses[i];
-    float bleu = smoothedSentenceBleu(scoreDataIters[translation.first]->operator[](translation.second));
-    bleuScores.push_back(bleu);
-  }
-  return bleuScores;
-}
-
-
 
 }

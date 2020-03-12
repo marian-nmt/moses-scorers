@@ -13,8 +13,6 @@
 #include "util/exception.hh"
 #include "Ngram.h"
 #include "Util.h"
-#include "ScoreDataIterator.h"
-#include "FeatureDataIterator.h"
 #include "Vocabulary.h"
 
 namespace MosesTuning

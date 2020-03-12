@@ -1,14 +1,11 @@
 #ifndef UTIL_EXCEPTION_H
 #define UTIL_EXCEPTION_H
 
-#include "util/string_stream.hh"
-
 #include <exception>
 #include <limits>
 #include <string>
 #include <stdint.h>
 
-// TODO(hieu): delete this
 #include <sstream>
 
 namespace util {
@@ -20,7 +17,7 @@ class Exception : public std::exception {
     Exception() throw();
     virtual ~Exception() throw();
 
-    const char *what() const throw() { return what_.str().c_str(); }
+    const char *what() const throw() { return what_.c_str(); }
 
     // For use by the UTIL_THROW macros.
     void SetLocation(
@@ -38,7 +35,7 @@ class Exception : public std::exception {
       typedef T Identity;
     };
 
-    StringStream what_;
+    std::string what_;
 };
 
 /* This implements the normal operator<< for Exception and all its children.
@@ -49,7 +46,7 @@ template <class Except, class Data> typename Except::template ExceptionTag<Excep
   // TODO(hieu): delete this.
   std::stringstream moses_hack;
   moses_hack << data;
-  e.what_ << moses_hack.str();
+  e.what_ = moses_hack.str();
   return e;
 }
 

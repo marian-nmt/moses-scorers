@@ -15,7 +15,7 @@
 #include "ScorerFactory.h"
 #include "Timer.h"
 #include "Util.h"
-#include "Data.h"
+// #include "Data.h"
 #include "util/random.hh"
 
 using namespace std;
@@ -63,6 +63,7 @@ vector<ScoreStats> EvaluatorUtil::loadCand(const string& candFile)
   return entries;
 }
 
+#if 0
 // load 1-best hypothesis from n-best file (useful if relying on alignment/tree information)
 vector<ScoreStats> EvaluatorUtil::loadNBest(const string& nBestFile)
 {
@@ -76,18 +77,22 @@ vector<ScoreStats> EvaluatorUtil::loadNBest(const string& nBestFile)
   }
   return entries;
 }
-
+#endif
 
 void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_input)
 {
 
   vector<ScoreStats> entries;
 
+#if 0
   if (nbest_input) {
     entries = loadNBest(candFile);
   } else {
+#endif
     entries = loadCand(candFile);
+if 0
   }
+#endif
 
   int n = entries.size();
   if (bootstrap) {

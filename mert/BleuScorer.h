@@ -33,8 +33,6 @@ public:
   explicit BleuScorer(const std::string& config = "");
   ~BleuScorer();
 
-  static std::vector<float> ScoreNbestList(const std::string& scoreFile, const std::string& featureFile);
-
   virtual void setReferenceFiles(const std::vector<std::string>& referenceFiles);
   virtual void prepareStats(std::size_t sid, const std::string& text, ScoreStats& entry);
   virtual statscore_t calculateScore(const std::vector<ScoreStatsType>& comps) const;

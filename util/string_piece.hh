@@ -59,10 +59,11 @@
 #include <unicode/uversion.h>
 
 // Old versions of ICU don't define operator== and operator!=.
-#if (U_ICU_VERSION_MAJOR_NUM < 4) || ((U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM < 4))
+#if(U_ICU_VERSION_MAJOR_NUM < 4) \
+    || ((U_ICU_VERSION_MAJOR_NUM == 4) && (U_ICU_VERSION_MINOR_NUM < 4))
 #warning You are using an old version of ICU.  Consider upgrading to ICU >= 4.6.
 inline bool operator==(const StringPiece& x, const StringPiece& y) {
-  if (x.size() != y.size())
+  if(x.size() != y.size())
     return false;
 
   return std::memcmp(x.data(), y.data(), x.size()) == 0;
@@ -71,7 +72,7 @@ inline bool operator==(const StringPiece& x, const StringPiece& y) {
 inline bool operator!=(const StringPiece& x, const StringPiece& y) {
   return !(x == y);
 }
-#endif // old version of ICU
+#endif  // old version of ICU
 
 U_NAMESPACE_BEGIN
 
@@ -84,8 +85,8 @@ inline bool starts_with(const StringPiece& longer, const StringPiece& prefix) {
 
 #include <algorithm>
 #include <cstddef>
-#include <string>
 #include <cstring>
+#include <string>
 
 #ifdef WIN32
 #undef max
@@ -93,24 +94,21 @@ inline bool starts_with(const StringPiece& longer, const StringPiece& prefix) {
 #endif
 
 class StringPiece {
- public:
+public:
   typedef size_t size_type;
 
- private:
-  const char*   ptr_;
-  size_type     length_;
+private:
+  const char* ptr_;
+  size_type length_;
 
- public:
+public:
   // We provide non-explicit singleton constructors so users can pass
   // in a "const char*" or a "string" wherever a "StringPiece" is
   // expected.
-  StringPiece() : ptr_(NULL), length_(0) { }
-  StringPiece(const char* str)
-    : ptr_(str), length_((str == NULL) ? 0 : strlen(str)) { }
-  StringPiece(const std::string& str)
-    : ptr_(str.data()), length_(str.size()) { }
-  StringPiece(const char* offset, size_type len)
-    : ptr_(offset), length_(len) { }
+  StringPiece() : ptr_(NULL), length_(0) {}
+  StringPiece(const char* str) : ptr_(str), length_((str == NULL) ? 0 : strlen(str)) {}
+  StringPiece(const std::string& str) : ptr_(str.data()), length_(str.size()) {}
+  StringPiece(const char* offset, size_type len) : ptr_(offset), length_(len) {}
 
   // data() may return a pointer to a buffer with embedded NULs, and the
   // returned buffer may or may not be null terminated.  Therefore it is
@@ -121,8 +119,14 @@ class StringPiece {
   size_type length() const { return length_; }
   bool empty() const { return length_ == 0; }
 
-  void clear() { ptr_ = NULL; length_ = 0; }
-  void set(const char* data, size_type len) { ptr_ = data; length_ = len; }
+  void clear() {
+    ptr_ = NULL;
+    length_ = 0;
+  }
+  void set(const char* data, size_type len) {
+    ptr_ = data;
+    length_ = len;
+  }
   void set(const char* str) {
     ptr_ = str;
     length_ = str ? strlen(str) : 0;
@@ -139,15 +143,15 @@ class StringPiece {
     length_ -= n;
   }
 
-  void remove_suffix(size_type n) {
-    length_ -= n;
-  }
+  void remove_suffix(size_type n) { length_ -= n; }
 
   int compare(const StringPiece& x) const {
     int r = wordmemcmp(ptr_, x.ptr_, std::min(length_, x.length_));
-    if (r == 0) {
-      if (length_ < x.length_) r = -1;
-      else if (length_ > x.length_) r = +1;
+    if(r == 0) {
+      if(length_ < x.length_)
+        r = -1;
+      else if(length_ > x.length_)
+        r = +1;
     }
     return r;
   }
@@ -162,14 +166,13 @@ class StringPiece {
 
   // Does "this" start with "x"
   bool starts_with(const StringPiece& x) const {
-    return ((length_ >= x.length_) &&
-            (wordmemcmp(ptr_, x.ptr_, x.length_) == 0));
+    return ((length_ >= x.length_) && (wordmemcmp(ptr_, x.ptr_, x.length_) == 0));
   }
 
   // Does "this" end with "x"
   bool ends_with(const StringPiece& x) const {
-    return ((length_ >= x.length_) &&
-            (wordmemcmp(ptr_ + (length_-x.length_), x.ptr_, x.length_) == 0));
+    return ((length_ >= x.length_)
+            && (wordmemcmp(ptr_ + (length_ - x.length_), x.ptr_, x.length_) == 0));
   }
 
   // standard STL container boilerplate
@@ -185,12 +188,8 @@ class StringPiece {
   typedef std::reverse_iterator<iterator> reverse_iterator;
   iterator begin() const { return ptr_; }
   iterator end() const { return ptr_ + length_; }
-  const_reverse_iterator rbegin() const {
-    return const_reverse_iterator(ptr_ + length_);
-  }
-  const_reverse_iterator rend() const {
-    return const_reverse_iterator(ptr_);
-  }
+  const_reverse_iterator rbegin() const { return const_reverse_iterator(ptr_ + length_); }
+  const_reverse_iterator rend() const { return const_reverse_iterator(ptr_); }
 
   size_type max_size() const { return length_; }
   size_type capacity() const { return length_; }
@@ -203,15 +202,11 @@ class StringPiece {
   size_type rfind(char c, size_type pos = npos) const;
 
   size_type find_first_of(const StringPiece& s, size_type pos = 0) const;
-  size_type find_first_of(char c, size_type pos = 0) const {
-    return find(c, pos);
-  }
+  size_type find_first_of(char c, size_type pos = 0) const { return find(c, pos); }
   size_type find_first_not_of(const StringPiece& s, size_type pos = 0) const;
   size_type find_first_not_of(char c, size_type pos = 0) const;
   size_type find_last_of(const StringPiece& s, size_type pos = npos) const;
-  size_type find_last_of(char c, size_type pos = npos) const {
-    return rfind(c, pos);
-  }
+  size_type find_last_of(char c, size_type pos = npos) const { return rfind(c, pos); }
   size_type find_last_not_of(const StringPiece& s, size_type pos = npos) const;
   size_type find_last_not_of(char c, size_type pos = npos) const;
 
@@ -223,7 +218,7 @@ class StringPiece {
 };
 
 inline bool operator==(const StringPiece& x, const StringPiece& y) {
-  if (x.size() != y.size())
+  if(x.size() != y.size())
     return false;
 
   return std::memcmp(x.data(), y.data(), x.size()) == 0;
@@ -237,11 +232,10 @@ inline bool starts_with(const StringPiece& longer, const StringPiece& prefix) {
   return longer.starts_with(prefix);
 }
 
-#endif // HAVE_ICU undefined
+#endif  // HAVE_ICU undefined
 
 inline bool operator<(const StringPiece& x, const StringPiece& y) {
-  const int r = std::memcmp(x.data(), y.data(),
-                                       std::min(x.size(), y.size()));
+  const int r = std::memcmp(x.data(), y.data(), std::min(x.size(), y.size()));
   return ((r < 0) || ((r == 0) && (x.size() < y.size())));
 }
 
@@ -257,8 +251,7 @@ inline bool operator>=(const StringPiece& x, const StringPiece& y) {
   return !(x < y);
 }
 
-inline StringPiece Trim(const StringPiece& str, const std::string dropChars = " \t\n\r")
-{
+inline StringPiece Trim(const StringPiece& str, const std::string dropChars = " \t\n\r") {
   StringPiece::size_type startPos = str.find_first_not_of(dropChars);
   StringPiece::size_type endPos = str.find_last_not_of(dropChars);
   StringPiece ret = str.substr(startPos, endPos - startPos + 1);

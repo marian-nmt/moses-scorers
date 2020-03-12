@@ -5,34 +5,19 @@ set(MERT_SOURCES
     Timer.cpp
     ScoreStats.cpp
     ScoreArray.cpp
-    ScoreData.cpp
-    ScoreDataIterator.cpp
-    FeatureStats.cpp
-    FeatureArray.cpp
-    FeatureData.cpp
-    FeatureDataIterator.cpp
-    ForestRescore.cpp
-    HopeFearDecoder.cpp
-    Hypergraph.cpp
-    MiraFeatureVector.cpp
-    MiraWeightVector.cpp
-    HypPackEnumerator.cpp
-    Data.cpp
     BleuScorer.cpp
     BleuDocScorer.cpp
     SemposScorer.cpp
     SemposOverlapping.cpp
     InterpolatedScorer.cpp
-    Point.cpp
     PerScorer.cpp
     HwcmScorer.cpp
     InternalTree.cpp
     M2.cpp
     M2Scorer.cpp
+    ScoreData.cpp
     Scorer.cpp
     ScorerFactory.cpp
-    Optimizer.cpp
-    OptimizerFactory.cpp
     TER/alignmentStruct.cpp
     TER/hashMap.cpp
     TER/hashMapStringInfos.cpp
