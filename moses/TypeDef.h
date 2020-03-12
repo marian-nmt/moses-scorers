@@ -26,8 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <string>
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 //! all the typedefs and enums goes here
 
@@ -166,9 +165,9 @@ typedef std::vector<FactorType> FactorList;
 typedef std::pair<std::vector<std::string const*>, WordAlignments> StringWordAlignmentCand;
 
 class TranslationTask;
-typedef boost::shared_ptr<TranslationTask> ttasksptr;
-typedef boost::weak_ptr<TranslationTask> ttaskwptr;
+typedef std::shared_ptr<TranslationTask> ttasksptr;
+typedef std::weak_ptr<TranslationTask> ttaskwptr;
 }
 
-#define SPTR boost::shared_ptr
-#define WPTR boost::weak_ptr
+#define SPTR std::shared_ptr
+#define WPTR std::weak_ptr

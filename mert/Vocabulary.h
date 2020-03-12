@@ -1,7 +1,7 @@
 #ifndef MERT_VOCABULARY_H_
 #define MERT_VOCABULARY_H_
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <string>
 
 namespace mert {
@@ -14,8 +14,8 @@ namespace mert {
  */
 class Vocabulary {
 public:
-  typedef boost::unordered_map<std::string, int>::iterator iterator;
-  typedef boost::unordered_map<std::string, int>::const_iterator const_iterator;
+  typedef std::unordered_map<std::string, int>::iterator iterator;
+  typedef std::unordered_map<std::string, int>::const_iterator const_iterator;
 
   Vocabulary() {}
   virtual ~Vocabulary() {}
@@ -45,7 +45,7 @@ public:
   const_iterator end() const { return m_vocab.end(); }
 
 private:
-  boost::unordered_map<std::string, int> m_vocab;
+  std::unordered_map<std::string, int> m_vocab;
 };
 
 class VocabularyFactory {

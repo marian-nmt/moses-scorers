@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "Scorer.h"
 #include "ScorerFactory.h"
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
   std::string sctype = argv[1];
   std::vector<std::string> refFiles(argv + 2, argv + argc);
 
-  boost::scoped_ptr<Scorer> scorer(ScorerFactory::getScorer(sctype, ""));
+  std::unique_ptr<Scorer> scorer(ScorerFactory::getScorer(sctype, ""));
   scorer->setReferenceFiles(refFiles);
 
   std::string hyp;

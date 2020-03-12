@@ -1,11 +1,11 @@
 #ifndef MERT_SEMPOSSCORER_H_
 #define MERT_SEMPOSSCORER_H_
 
-#include <boost/scoped_ptr.hpp>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
+#include <memory>
 
 #include "Scorer.h"
 
@@ -39,7 +39,7 @@ public:
   float weight(int item) const;
 
 private:
-  boost::scoped_ptr<SemposOverlapping> m_ovr;
+  std::unique_ptr<SemposOverlapping> m_ovr;
   std::vector<std::vector<sentence_t> > m_ref_sentences;
 
   typedef std::map<std::string, int> encoding_t;
