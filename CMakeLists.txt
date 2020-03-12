@@ -22,9 +22,9 @@ else(Boost_FOUND)
     message(SEND_ERROR "Cannot find Boost libraries. Terminating.")
 endif(Boost_FOUND)
 
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/util)
-include_directories(${CMAKE_SOURCE_DIR}/mert)
+include_directories(.)
+include_directories(./util)
+include_directories(./mert)
 
 add_subdirectory(util)
 add_subdirectory(mert)
@@ -36,7 +36,7 @@ add_library(mosesscorers STATIC
 )
 
 add_executable(evaluator mert/evaluator.cpp)
-set_target_properties(evaluator PROPERTIES OUTPUT_NAME evaluator-vocab)
+set_target_properties(evaluator PROPERTIES OUTPUT_NAME evaluator)
 target_compile_options(evaluator PUBLIC ${ALL_WARNINGS})
 target_link_libraries(evaluator ${EXT_LIBS} mosesscorers ${EXT_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 set_target_properties(evaluator PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
