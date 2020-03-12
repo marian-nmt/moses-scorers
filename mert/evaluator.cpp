@@ -90,7 +90,7 @@ void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_i
   } else {
 #endif
     entries = loadCand(candFile);
-if 0
+#if 0
   }
 #endif
 
