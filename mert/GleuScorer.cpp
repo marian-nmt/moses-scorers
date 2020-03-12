@@ -8,8 +8,6 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <boost/algorithm/string.hpp>
-
 #include "Ngram.h"
 #include "Util.h"
 #include "Vocabulary.h"
@@ -69,7 +67,7 @@ void GleuScorer::setReferenceFiles(const std::vector<std::string>& referenceFile
 
   while(getline(ifs, line)) {
     std::vector<std::string> columns;
-    boost::split(columns, line, boost::is_any_of("\t"));
+    split(line, '\t', columns);
 
     // check if there is at least a source sentence and one reference sentence
     UTIL_THROW_IF2(
