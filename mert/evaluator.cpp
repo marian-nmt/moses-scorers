@@ -167,8 +167,8 @@ void usage() {
   cerr << "[--nbest|-n] comma separated list of nbest files (only 1-best is evaluated)" << endl;
   cerr << "[--factors|-f] list of factors passed to the scorer (e.g. 0|2)" << endl;
   cerr << "[--filter|-l] filter command which will be used to preprocess the sentences" << endl;
-  cerr << "[--bootstrap|-b] number of booststraped samples (default 0 - no bootstraping)" << endl;
-  cerr << "[--rseed|-r] the random seed for bootstraping (defaults to system clock)" << endl;
+  cerr << "[--bootstrap|-b] number of bootstrapped samples (default 0 - no bootstrapping)" << endl;
+  cerr << "[--rseed|-r] the random seed for bootstrapping (defaults to system clock)" << endl;
   cerr << "[--help|-h] print this message and exit" << endl;
   cerr << endl;
   cerr << "Evaluator is able to compute more metrics at once. To do this," << endl;

@@ -75,8 +75,6 @@ long hashMapInfos::hashValue(string key) {
   locale loc;  // the "C" locale
   const collate<char>& coll = use_facet<collate<char> >(loc);
   return coll.hash(key.data(), key.data() + key.length());
-  // 	boost::hash<string> hasher;
-  //         return hasher ( key );
 }
 /**
  * void hashMapInfos::addHasher ( string key, string value )
