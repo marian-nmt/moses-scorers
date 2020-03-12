@@ -29,26 +29,21 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #include "tools.h"
 
 using namespace std;
-namespace TERCPPNS_HashMapSpace
-{
-class infosHasher
-{
+namespace TERCPPNS_HashMapSpace {
+class infosHasher {
 private:
   long m_hashKey;
   string m_key;
   vector<int> m_value;
 
 public:
-  infosHasher ( long cle, string cleTxt, vector<int> valueVecInt );
+  infosHasher(long cle, string cleTxt, vector<int> valueVecInt);
   long getHashKey();
   string getKey();
   vector<int> getValue();
-  void setValue ( vector<int> value );
+  void setValue(vector<int> value);
   string toString();
-
-
 };
 
-
-}
+}  // namespace TERCPPNS_HashMapSpace
 #endif

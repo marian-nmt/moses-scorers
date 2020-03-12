@@ -22,46 +22,34 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 using namespace std;
 
-namespace TERCPPNS_TERCpp
-{
-bestShiftStruct::bestShiftStruct()
-{
-  m_best_shift=new terShift();
-  m_best_align=new terAlignment();
-  m_empty=new bool(false);
+namespace TERCPPNS_TERCpp {
+bestShiftStruct::bestShiftStruct() {
+  m_best_shift = new terShift();
+  m_best_align = new terAlignment();
+  m_empty = new bool(false);
 }
-bestShiftStruct::~bestShiftStruct()
-{
+bestShiftStruct::~bestShiftStruct() {
   delete(m_best_align);
   delete(m_best_shift);
 }
-void bestShiftStruct::setEmpty(bool b)
-{
-  m_empty=new bool(b);
+void bestShiftStruct::setEmpty(bool b) {
+  m_empty = new bool(b);
 }
-void bestShiftStruct::setBestShift(terShift * l_terShift)
-{
+void bestShiftStruct::setBestShift(terShift* l_terShift) {
   m_best_shift->set(l_terShift);
 }
-void bestShiftStruct::setBestAlign(terAlignment * l_terAlignment)
-{
+void bestShiftStruct::setBestAlign(terAlignment* l_terAlignment) {
   m_best_align->set(l_terAlignment);
 }
-string bestShiftStruct::toString()
-{
+string bestShiftStruct::toString() {
   stringstream s;
   s << m_best_shift->toString() << endl;
   s << m_best_align->toString() << endl;
-//	    s << (*m_empty) << endl;
+  //	    s << (*m_empty) << endl;
   return s.str();
 }
-bool bestShiftStruct::getEmpty()
-{
+bool bestShiftStruct::getEmpty() {
   return (*(m_empty));
 }
 
-
-
-
-
-}
+}  // namespace TERCPPNS_TERCpp

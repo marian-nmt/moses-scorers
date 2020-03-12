@@ -24,32 +24,30 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #ifndef __HASHMAP_H__
 #define __HASHMAP_H__
 #include <boost/functional/hash.hpp>
-#include "stringHasher.h"
-#include <vector>
-#include <string>
-#include <sstream>
 #include <fstream>
 #include <locale>
+#include <sstream>
+#include <string>
+#include <vector>
+#include "stringHasher.h"
 
 using namespace std;
 
-namespace TERCPPNS_HashMapSpace
-{
-class hashMap
-{
+namespace TERCPPNS_HashMapSpace {
+class hashMap {
 private:
   vector<stringHasher> m_hasher;
 
 public:
-//     ~hashMap();
-  long hashValue ( string key );
-  int trouve ( long searchKey );
-  int trouve ( string key );
-  void addHasher ( string key, string value );
-  stringHasher getHasher ( string key );
-  string getValue ( string key );
-  string searchValue ( string key );
-  void setValue ( string key , string value );
+  //     ~hashMap();
+  long hashValue(string key);
+  int trouve(long searchKey);
+  int trouve(string key);
+  void addHasher(string key, string value);
+  stringHasher getHasher(string key);
+  string getValue(string key);
+  string searchValue(string key);
+  void setValue(string key, string value);
   void printHash();
   vector<stringHasher> getHashMap();
   string printStringHash();
@@ -57,8 +55,6 @@ public:
   string printStringHashForLexicon();
 };
 
-
-}
-
+}  // namespace TERCPPNS_HashMapSpace
 
 #endif

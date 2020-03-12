@@ -21,42 +21,33 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #include "stringInfosHasher.h"
 // The following class defines a hash function for strings
 
-
 using namespace std;
 using namespace TERCPPNS_Tools;
 
-namespace TERCPPNS_HashMapSpace
-{
-stringInfosHasher::stringInfosHasher ( long cle, string cleTxt, vector<string> valueVecInt )
-{
-  m_hashKey=cle;
-  m_key=cleTxt;
-  m_value=valueVecInt;
+namespace TERCPPNS_HashMapSpace {
+stringInfosHasher::stringInfosHasher(long cle, string cleTxt, vector<string> valueVecInt) {
+  m_hashKey = cle;
+  m_key = cleTxt;
+  m_value = valueVecInt;
 }
 //     stringInfosHasher::~stringInfosHasher(){};*/
-long  stringInfosHasher::getHashKey()
-{
+long stringInfosHasher::getHashKey() {
   return m_hashKey;
 }
-string  stringInfosHasher::getKey()
-{
+string stringInfosHasher::getKey() {
   return m_key;
 }
-vector<string> stringInfosHasher::getValue()
-{
+vector<string> stringInfosHasher::getValue() {
   return m_value;
 }
-void stringInfosHasher::setValue ( vector<string>   value )
-{
-  m_value=value;
+void stringInfosHasher::setValue(vector<string> value) {
+  m_value = value;
 }
-string stringInfosHasher::toString()
-{
+string stringInfosHasher::toString() {
   stringstream to_return;
-  to_return << m_hashKey << "\t" << m_key << "\t" << vectorToString(m_value,"\t") << endl;
+  to_return << m_hashKey << "\t" << m_key << "\t" << vectorToString(m_value, "\t") << endl;
   return to_return.str();
 }
 
-
 // typedef stdext::hash_map<string, string, stringhasher> HASH_S_S;
-}
+}  // namespace TERCPPNS_HashMapSpace

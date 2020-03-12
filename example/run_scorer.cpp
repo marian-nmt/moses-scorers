@@ -2,8 +2,9 @@
 #include "moses_scorers.h"
 
 int main(int argc, char **argv) {
-  if (argc == 1) {
-    std::cerr << "Usage: ./run-scorer sctype scconfig ref1 [ref2...] < candidate > score" << std::endl;
+  if(argc == 1) {
+    std::cerr << "Usage: ./run-scorer sctype scconfig ref1 [ref2...] < candidate > score"
+              << std::endl;
     return 1;
   }
 

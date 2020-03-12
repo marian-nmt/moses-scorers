@@ -3,26 +3,24 @@
 
 #include <string>
 #include <vector>
-#include "Types.h"
+#include "ScopedVector.h"
 #include "ScoreData.h"
 #include "Scorer.h"
-#include "ScopedVector.h"
+#include "Types.h"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 /**
-  * Class that includes other scorers eg.
-  * Interpolated HAMMING and BLEU scorer **/
-class InterpolatedScorer : public Scorer
-{
+ * Class that includes other scorers eg.
+ * Interpolated HAMMING and BLEU scorer **/
+class InterpolatedScorer : public Scorer {
 public:
   // name would be: "HAMMING,BLEU" or similar
   InterpolatedScorer(const std::string& name, const std::string& config);
   virtual ~InterpolatedScorer() {}
 
-  virtual void score(const candidates_t& candidates, const diffs_t& diffs,
+  virtual void score(const candidates_t& candidates,
+                     const diffs_t& diffs,
                      statscores_t& scores) const;
 
   virtual void setReferenceFiles(const std::vector<std::string>& referenceFiles);
@@ -30,8 +28,8 @@ public:
 
   virtual std::size_t NumberOfScores() const {
     std::size_t sz = 0;
-    for (ScopedVector<Scorer>::const_iterator itsc = m_scorers.begin();
-         itsc != m_scorers.end(); ++itsc) {
+    for(ScopedVector<Scorer>::const_iterator itsc = m_scorers.begin(); itsc != m_scorers.end();
+        ++itsc) {
       sz += (*itsc)->NumberOfScores();
     }
     return sz;
@@ -62,6 +60,6 @@ protected:
   std::vector<float> m_scorer_weights;
 };
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_INTERPOLATED_SCORER_H_

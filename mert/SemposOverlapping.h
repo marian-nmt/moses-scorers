@@ -9,9 +9,7 @@
 
 #include "Types.h"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 class SemposScorer;
 
@@ -22,24 +20,23 @@ typedef std::pair<std::string, std::string> str_item_t;
 typedef std::vector<str_item_t> str_sentence_t;
 typedef str_sentence_t::const_iterator str_sentence_it;
 
-typedef std::pair<int,int> item_t;
+typedef std::pair<int, int> item_t;
 typedef std::multiset<item_t> sentence_t;
 typedef sentence_t::const_iterator sentence_it;
 
 /**
  * An interface for classes representing overlapping formulas
  */
-class SemposOverlapping
-{
+class SemposOverlapping {
 public:
   virtual ~SemposOverlapping() {}
-  virtual std::vector<ScoreStatsType> prepareStats(const sentence_t& cand, const sentence_t& ref) = 0;
+  virtual std::vector<ScoreStatsType> prepareStats(const sentence_t& cand, const sentence_t& ref)
+      = 0;
   virtual float calculateScore(const std::vector<ScoreStatsType>& stats) const = 0;
   virtual std::size_t NumberOfScores() const = 0;
 };
 
-class SemposOverlappingFactory
-{
+class SemposOverlappingFactory {
 public:
   static SemposOverlapping* GetOverlapping(const std::string& str, const SemposScorer* sempos);
 
@@ -57,17 +54,14 @@ private:
  * Please refer to the paper for details:
  * http://aclweb.org/anthology-new/W/W11/W11-2108.pdf
  */
-class CapMicroOverlapping : public SemposOverlapping
-{
+class CapMicroOverlapping : public SemposOverlapping {
 public:
   CapMicroOverlapping(const SemposScorer* sempos) : semposScorer(sempos) {}
   ~CapMicroOverlapping() {}
 
   virtual std::vector<ScoreStatsType> prepareStats(const sentence_t& cand, const sentence_t& ref);
   virtual float calculateScore(const std::vector<ScoreStatsType>& stats) const;
-  virtual std::size_t NumberOfScores() const {
-    return 2;
-  }
+  virtual std::size_t NumberOfScores() const { return 2; }
 
 private:
   // no copying allowed.
@@ -79,17 +73,14 @@ private:
 /**
  * Overlapping proposed by (Kos and Bojar, 2009)
  */
-class CapMacroOverlapping : public SemposOverlapping
-{
+class CapMacroOverlapping : public SemposOverlapping {
 public:
   CapMacroOverlapping(const SemposScorer* sempos) : semposScorer(sempos) {}
   ~CapMacroOverlapping() {}
 
   virtual std::vector<ScoreStatsType> prepareStats(const sentence_t& cand, const sentence_t& ref);
   virtual float calculateScore(const std::vector<ScoreStatsType>& stats) const;
-  virtual std::size_t NumberOfScores() const {
-    return kMaxNOC * 2;
-  }
+  virtual std::size_t NumberOfScores() const { return kMaxNOC * 2; }
 
 private:
   // no copying allowed.
@@ -98,6 +89,6 @@ private:
   const SemposScorer* semposScorer;
 };
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_SEMPOSOVERLAPPING_H_

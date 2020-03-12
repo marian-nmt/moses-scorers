@@ -16,18 +16,15 @@
 #include <vector>
 
 #include <boost/unordered_map.hpp>
-#include "util/string_piece.hh"
 #include "Types.h"
+#include "util/string_piece.hh"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 // Minimal sparse vector
-class SparseVector
-{
+class SparseVector {
 public:
-  typedef std::map<std::size_t,FeatureStatsType> fvector_t;
+  typedef std::map<std::size_t, FeatureStatsType> fvector_t;
   typedef std::map<std::string, std::size_t> name2id_t;
   typedef std::vector<std::string> id2name_t;
 
@@ -37,9 +34,7 @@ public:
   void set(size_t id, FeatureStatsType value);
   void clear();
   void load(const std::string& file);
-  std::size_t size() const {
-    return m_fvector.size();
-  }
+  std::size_t size() const { return m_fvector.size(); }
 
   void write(std::ostream& out, const std::string& sep = " ") const;
 
@@ -64,8 +59,7 @@ private:
 SparseVector operator-(const SparseVector& lhs, const SparseVector& rhs);
 FeatureStatsType inner_product(const SparseVector& lhs, const SparseVector& rhs);
 
-class FeatureStats
-{
+class FeatureStats {
 private:
   std::size_t m_available_size;
   std::size_t m_entries;
@@ -81,14 +75,12 @@ public:
   ~FeatureStats();
 
   // We intentionally allow copying.
-  FeatureStats(const FeatureStats &stats);
-  FeatureStats& operator=(const FeatureStats &stats);
+  FeatureStats(const FeatureStats& stats);
+  FeatureStats& operator=(const FeatureStats& stats);
 
-  void Copy(const FeatureStats &stats);
+  void Copy(const FeatureStats& stats);
 
-  bool isfull() const {
-    return (m_entries < m_available_size) ? 0 : 1;
-  }
+  bool isfull() const { return (m_entries < m_available_size) ? 0 : 1; }
   void expand();
   void add(FeatureStatsType v);
   void addSparse(const std::string& name, FeatureStatsType v);
@@ -103,39 +95,23 @@ public:
     clear();
   }
 
-  FeatureStatsType get(std::size_t i) {
-    return m_array[i];
-  }
-  FeatureStatsType get(std::size_t i)const {
-    return m_array[i];
-  }
-  featstats_t getArray() const {
-    return m_array;
-  }
+  FeatureStatsType get(std::size_t i) { return m_array[i]; }
+  FeatureStatsType get(std::size_t i) const { return m_array[i]; }
+  featstats_t getArray() const { return m_array; }
 
-  const SparseVector& getSparse() const {
-    return m_map;
-  }
+  const SparseVector& getSparse() const { return m_map; }
 
-  void set(std::string &theString, const SparseVector& sparseWeights);
+  void set(std::string& theString, const SparseVector& sparseWeights);
 
-  inline std::size_t bytes() const {
-    return GetArraySizeWithBytes();
-  }
+  inline std::size_t bytes() const { return GetArraySizeWithBytes(); }
 
-  std::size_t GetArraySizeWithBytes() const {
-    return m_entries * sizeof(FeatureStatsType);
-  }
+  std::size_t GetArraySizeWithBytes() const { return m_entries * sizeof(FeatureStatsType); }
 
-  std::size_t size() const {
-    return m_entries;
-  }
+  std::size_t size() const { return m_entries; }
 
-  std::size_t available() const {
-    return m_available_size;
-  }
+  std::size_t available() const { return m_available_size; }
 
-  void savetxt(const std::string &file);
+  void savetxt(const std::string& file);
   void savetxt(std::ostream* os);
   void savebin(std::ostream* os);
   void savetxt();
@@ -151,6 +127,6 @@ public:
 
 bool operator==(const FeatureStats& f1, const FeatureStats& f2);
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_FEATURE_STATS_H_

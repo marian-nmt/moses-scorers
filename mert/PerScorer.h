@@ -4,12 +4,10 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "Types.h"
 #include "StatisticsBasedScorer.h"
+#include "Types.h"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 class ScoreStats;
 
@@ -19,17 +17,14 @@ class ScoreStats;
  *   1 - (correct - max(0,output_length - ref_length)) / ref_length
  * In fact, we ignore the " 1 - " so that it can be maximised.
  */
-class PerScorer: public StatisticsBasedScorer
-{
+class PerScorer : public StatisticsBasedScorer {
 public:
   explicit PerScorer(const std::string& config = "");
   ~PerScorer();
 
   virtual void setReferenceFiles(const std::vector<std::string>& referenceFiles);
   virtual void prepareStats(std::size_t sid, const std::string& text, ScoreStats& entry);
-  virtual std::size_t NumberOfScores() const {
-    return 3;
-  }
+  virtual std::size_t NumberOfScores() const { return 3; }
   virtual float calculateScore(const std::vector<ScoreStatsType>& comps) const;
 
 private:
@@ -42,6 +37,6 @@ private:
   std::vector<std::multiset<int> > m_ref_tokens;
 };
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_PER_SCORER_H_

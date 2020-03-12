@@ -22,676 +22,636 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 using namespace std;
 using namespace boost::xpressive;
-namespace TERCPPNS_Tools
-{
+namespace TERCPPNS_Tools {
 
-string vectorToString ( vector<string> vec )
-{
-  string retour ( "" );
-  for ( vector<string>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour += ( *vecIter );
+string vectorToString(vector<string> vec) {
+  string retour("");
+  for(vector<string>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour += (*vecIter);
     } else {
-      retour += "\t" + ( *vecIter );
+      retour += "\t" + (*vecIter);
     }
   }
   return retour;
 }
-string vectorToString ( vector<char> vec )
-{
+string vectorToString(vector<char> vec) {
   stringstream retour;
   retour.str("");
-  for ( vector<char>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour << ( *vecIter );
+  for(vector<char>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour << (*vecIter);
     } else {
-      retour << "\t" << ( *vecIter );
+      retour << "\t" << (*vecIter);
     }
   }
   return retour.str();
 }
-string vectorToString ( vector<int> vec )
-{
+string vectorToString(vector<int> vec) {
   stringstream retour;
   retour.str("");
-  for ( vector<int>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour << ( *vecIter );
+  for(vector<int>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour << (*vecIter);
     } else {
-      retour << "\t" << ( *vecIter );
+      retour << "\t" << (*vecIter);
     }
   }
   return retour.str();
 }
-string vectorToString ( vector<int> * vec )
-{
+string vectorToString(vector<int>* vec) {
   stringstream retour;
   retour.str("");
-  for ( vector<int>::iterator vecIter = vec->begin(); vecIter != vec->end(); vecIter++ ) {
-    if ( vecIter == vec->begin() ) {
-      retour << ( *vecIter );
+  for(vector<int>::iterator vecIter = vec->begin(); vecIter != vec->end(); vecIter++) {
+    if(vecIter == vec->begin()) {
+      retour << (*vecIter);
     } else {
-      retour << "\t" << ( *vecIter );
+      retour << "\t" << (*vecIter);
     }
   }
   return retour.str();
 }
 
-string vectorToString ( vector< string > vec, string s )
-{
-  string retour ( "" );
-  for ( vector<string>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour += ( *vecIter );
+string vectorToString(vector<string> vec, string s) {
+  string retour("");
+  for(vector<string>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour += (*vecIter);
     } else {
-      retour += s + ( *vecIter );
+      retour += s + (*vecIter);
     }
   }
   return retour;
-
 }
 
-string vectorToString ( vector< char > vec, string s )
-{
+string vectorToString(vector<char> vec, string s) {
   stringstream retour;
   retour.str("");
-  for ( vector<char>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour << ( *vecIter );
+  for(vector<char>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour << (*vecIter);
     } else {
-      retour << s << ( *vecIter );
+      retour << s << (*vecIter);
     }
   }
   return retour.str();
-
 }
 
-string vectorToString ( vector< int > vec, string s )
-{
+string vectorToString(vector<int> vec, string s) {
   stringstream retour;
   retour.str("");
-  for ( vector<int>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour << ( *vecIter );
+  for(vector<int>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour << (*vecIter);
     } else {
-      retour <<  s << ( *vecIter );
+      retour << s << (*vecIter);
     }
   }
   return retour.str();
-
 }
 
-string vectorToString ( vector< bool > vec, string s )
-{
+string vectorToString(vector<bool> vec, string s) {
   stringstream retour;
   retour.str("");
-  for ( vector<bool>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++ ) {
-    if ( vecIter == vec.begin() ) {
-      retour << ( *vecIter );
+  for(vector<bool>::iterator vecIter = vec.begin(); vecIter != vec.end(); vecIter++) {
+    if(vecIter == vec.begin()) {
+      retour << (*vecIter);
     } else {
-      retour <<  s << ( *vecIter );
+      retour << s << (*vecIter);
     }
   }
   return retour.str();
-
 }
-string vectorToString ( char* vec, string s , int taille)
-{
+string vectorToString(char* vec, string s, int taille) {
   stringstream retour;
   retour.str("");
   int l_i;
-  for ( l_i=0; l_i < taille ; l_i++) {
-    if ( l_i == 0 ) {
+  for(l_i = 0; l_i < taille; l_i++) {
+    if(l_i == 0) {
       retour << vec[l_i];
     } else {
       retour << s << vec[l_i];
     }
   }
   return retour.str();
-
 }
 
-string vectorToString ( int* vec, string s , int taille)
-{
+string vectorToString(int* vec, string s, int taille) {
   stringstream retour;
   retour.str("");
   int l_i;
-  for ( l_i=0; l_i < taille ; l_i++) {
-    if ( l_i == 0 ) {
+  for(l_i = 0; l_i < taille; l_i++) {
+    if(l_i == 0) {
       retour << vec[l_i];
     } else {
       retour << s << vec[l_i];
     }
   }
   return retour.str();
-
 }
 
-string vectorToString ( bool* vec, string s , int taille)
-{
+string vectorToString(bool* vec, string s, int taille) {
   stringstream retour;
   retour.str("");
   int l_i;
-  for ( l_i=0; l_i < taille ; l_i++) {
-    if ( l_i == 0 ) {
+  for(l_i = 0; l_i < taille; l_i++) {
+    if(l_i == 0) {
       retour << vec[l_i];
     } else {
       retour << s << vec[l_i];
     }
   }
   return retour.str();
-
 }
 
-string vectorToString ( vector<bool>* vec, string s , int taille)
-{
+string vectorToString(vector<bool>* vec, string s, int taille) {
   stringstream retour;
   retour.str("");
   int l_i;
-  for ( l_i=0; l_i < taille ; l_i++) {
-    if ( l_i == 0 ) {
+  for(l_i = 0; l_i < taille; l_i++) {
+    if(l_i == 0) {
       retour << vec->at(l_i);
     } else {
       retour << s << vec->at(l_i);
     }
   }
   return retour.str();
-
 }
 
-string vectorToString ( vector<int>* vec, string s , int taille)
-{
+string vectorToString(vector<int>* vec, string s, int taille) {
   stringstream retour;
   retour.str("");
   int l_i;
-  for ( l_i=0; l_i < taille ; l_i++) {
-    if ( l_i == 0 ) {
+  for(l_i = 0; l_i < taille; l_i++) {
+    if(l_i == 0) {
       retour << vec->at(l_i);
     } else {
       retour << s << vec->at(l_i);
     }
   }
   return retour.str();
-
 }
 
-
-
-vector<string> subVector ( vector<string> vec, int start, int end )
-{
+vector<string> subVector(vector<string> vec, int start, int end) {
   vector<string> retour;
-  if ( start > end ) {
+  if(start > end) {
     cerr << "ERREUR : TERcalc::subVector : end > start" << endl;
-    exit ( 0 );
+    exit(0);
   }
-  for ( int i = start; ( ( i < end ) && ( i < ( int ) vec.size() ) ); i++ ) {
-    retour.push_back ( vec.at ( i ) );
+  for(int i = start; ((i < end) && (i < (int)vec.size())); i++) {
+    retour.push_back(vec.at(i));
   }
   return retour;
 }
 
-vector<int> subVector ( vector<int> vec, int start, int end )
-{
+vector<int> subVector(vector<int> vec, int start, int end) {
   vector<int> retour;
-  if ( start > end ) {
+  if(start > end) {
     cerr << "ERREUR : TERcalc::subVector : end > start" << endl;
-    exit ( 0 );
+    exit(0);
   }
-  for ( int i = start; ( ( i < end ) && ( i < ( int ) vec.size() ) ); i++ ) {
-    retour.push_back ( vec.at ( i ) );
+  for(int i = start; ((i < end) && (i < (int)vec.size())); i++) {
+    retour.push_back(vec.at(i));
   }
   return retour;
 }
 
-vector<float> subVector ( vector<float> vec, int start, int end )
-{
+vector<float> subVector(vector<float> vec, int start, int end) {
   vector<float> retour;
-  if ( start > end ) {
+  if(start > end) {
     cerr << "ERREUR : TERcalc::subVector : end > start" << endl;
-    exit ( 0 );
+    exit(0);
   }
-  for ( int i = start; ( ( i < end ) && ( i < ( int ) vec.size() ) ); i++ ) {
-    retour.push_back ( vec.at ( i ) );
+  for(int i = start; ((i < end) && (i < (int)vec.size())); i++) {
+    retour.push_back(vec.at(i));
   }
   return retour;
 }
 
-vector<string> copyVector ( vector<string> vec )
-{
+vector<string> copyVector(vector<string> vec) {
   vector<string> retour;
-  for ( int i = 0; i < ( int ) vec.size(); i++ ) {
-    retour.push_back ( vec.at ( i ) );
+  for(int i = 0; i < (int)vec.size(); i++) {
+    retour.push_back(vec.at(i));
   }
   return retour;
 }
-vector<int> copyVector ( vector<int> vec )
-{
+vector<int> copyVector(vector<int> vec) {
   vector<int> retour;
-  for ( int i = 0; i < ( int ) vec.size(); i++ ) {
-    retour.push_back ( vec.at ( i ) );
+  for(int i = 0; i < (int)vec.size(); i++) {
+    retour.push_back(vec.at(i));
   }
   return retour;
 }
-vector<float> copyVector ( vector<float> vec )
-{
+vector<float> copyVector(vector<float> vec) {
   vector<float> retour;
-  for ( int i = 0; i < ( int ) vec.size(); i++ ) {
-    retour.push_back ( vec.at ( i ) );
+  for(int i = 0; i < (int)vec.size(); i++) {
+    retour.push_back(vec.at(i));
   }
   return retour;
 }
-vector<string> stringToVector ( string s, string tok )
-{
+vector<string> stringToVector(string s, string tok) {
   vector<string> to_return;
-  string to_push ( "" );
+  string to_push("");
   bool pushed = false;
   string::iterator sIt;
-  for ( sIt = s.begin(); sIt < s.end(); sIt++ ) {
+  for(sIt = s.begin(); sIt < s.end(); sIt++) {
     pushed = false;
-    for ( string::iterator sTok = tok.begin(); sTok < tok.end(); sTok++ ) {
-      if ( ( *sIt ) == ( *sTok ) ) {
-        to_return.push_back ( to_push );
+    for(string::iterator sTok = tok.begin(); sTok < tok.end(); sTok++) {
+      if((*sIt) == (*sTok)) {
+        to_return.push_back(to_push);
         to_push = "";
         pushed = true;
       }
     }
-    if ( !pushed ) {
-      to_push.push_back ( ( *sIt ) );
+    if(!pushed) {
+      to_push.push_back((*sIt));
     }
   }
-  to_return.push_back ( to_push );
+  to_return.push_back(to_push);
   return to_return;
 }
-vector<int> stringToVectorInt ( string s, string tok )
-{
+vector<int> stringToVectorInt(string s, string tok) {
   vector<int> to_return;
-  string to_push ( "" );
+  string to_push("");
   bool pushed = false;
   string::iterator sIt;
-  for ( sIt = s.begin(); sIt < s.end(); sIt++ ) {
+  for(sIt = s.begin(); sIt < s.end(); sIt++) {
     pushed = false;
-    for ( string::iterator sTok = tok.begin(); sTok < tok.end(); sTok++ ) {
-      if ( ( *sIt ) == ( *sTok ) ) {
-        if ( ( int ) to_push.length() > 0 ) {
-          to_return.push_back ( atoi ( to_push.c_str() ) );
+    for(string::iterator sTok = tok.begin(); sTok < tok.end(); sTok++) {
+      if((*sIt) == (*sTok)) {
+        if((int)to_push.length() > 0) {
+          to_return.push_back(atoi(to_push.c_str()));
         }
         to_push = "";
         pushed = true;
       }
     }
-    if ( !pushed ) {
-      to_push.push_back ( ( *sIt ) );
+    if(!pushed) {
+      to_push.push_back((*sIt));
     }
   }
-  if ( ( int ) to_push.length() > 0 ) {
-    to_return.push_back ( atoi ( to_push.c_str() ) );
+  if((int)to_push.length() > 0) {
+    to_return.push_back(atoi(to_push.c_str()));
   }
   return to_return;
 }
-vector<float> stringToVectorFloat ( string s, string tok )
-{
+vector<float> stringToVectorFloat(string s, string tok) {
   vector<float> to_return;
-  string to_push ( "" );
+  string to_push("");
   bool pushed = false;
   string::iterator sIt;
-  for ( sIt = s.begin(); sIt < s.end(); sIt++ ) {
+  for(sIt = s.begin(); sIt < s.end(); sIt++) {
     pushed = false;
-    for ( string::iterator sTok = tok.begin(); sTok < tok.end(); sTok++ ) {
-      if ( ( *sIt ) == ( *sTok ) ) {
-        if ( ( int ) to_push.length() > 0 ) {
-          to_return.push_back ( atof ( to_push.c_str() ) );
+    for(string::iterator sTok = tok.begin(); sTok < tok.end(); sTok++) {
+      if((*sIt) == (*sTok)) {
+        if((int)to_push.length() > 0) {
+          to_return.push_back(atof(to_push.c_str()));
         }
         to_push = "";
         pushed = true;
       }
     }
-    if ( !pushed ) {
-      to_push.push_back ( ( *sIt ) );
+    if(!pushed) {
+      to_push.push_back((*sIt));
     }
   }
-  if ( ( int ) to_push.length() > 0 ) {
-    to_return.push_back ( atoi ( to_push.c_str() ) );
+  if((int)to_push.length() > 0) {
+    to_return.push_back(atoi(to_push.c_str()));
   }
   return to_return;
 }
 
-string lowerCase ( string str )
-{
-  for ( int i = 0; i < ( int ) str.size(); i++ ) {
-    if ( ( str[i] >= 0x41 ) && ( str[i] <= 0x5A ) ) {
+string lowerCase(string str) {
+  for(int i = 0; i < (int)str.size(); i++) {
+    if((str[i] >= 0x41) && (str[i] <= 0x5A)) {
       str[i] = str[i] + 0x20;
     }
   }
   return str;
 }
-string removePunctTercom ( string str )
-{
+string removePunctTercom(string str) {
   string str_mod = str;
   sregex rex;
   string replace;
 
-
-  rex = sregex::compile ( "^[ ]+" );
+  rex = sregex::compile("^[ ]+");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\"]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\"]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[,]" );
+  rex = sregex::compile("[,]");
   replace = " ";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([^0-9])([\\.])([^0-9])" );
-  replace = ( "$1 $3" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([^0-9])([\\.])([^0-9])");
+  replace = ("$1 $3");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([^0-9])([\\.])([^0-9])" );
-  replace = ( "$1 $3" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([^0-9])([\\.])([^0-9])");
+  replace = ("$1 $3");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([^0-9])([\\.])([^0-9])" );
-  replace = ( "$1 $3" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([^0-9])([\\.])([^0-9])");
+  replace = ("$1 $3");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([\\.]$)" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([\\.]$)");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\?]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\?]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\;]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\;]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\:]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\:]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\!]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\!]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\(]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\(]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\)]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\)]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[ ]+" );
+  rex = sregex::compile("[ ]+");
   replace = " ";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[ ]+$" );
+  rex = sregex::compile("[ ]+$");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
   return str_mod;
 }
-string removePunct ( string str )
-{
+string removePunct(string str) {
   string str_mod = str;
   sregex rex;
   string replace;
 
-
-  rex = sregex::compile ( "^[ ]+" );
+  rex = sregex::compile("^[ ]+");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\"]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\"]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[,]" );
+  rex = sregex::compile("[,]");
   replace = " ";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([^0-9])([\\.])([^0-9])" );
-  replace = ( "$1 $3" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([^0-9])([\\.])([^0-9])");
+  replace = ("$1 $3");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([^0-9])([\\.])([^0-9])" );
-  replace = ( "$1 $3" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([^0-9])([\\.])([^0-9])");
+  replace = ("$1 $3");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([^0-9])([\\.])([^0-9])" );
-  replace = ( "$1 $3" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([^0-9])([\\.])([^0-9])");
+  replace = ("$1 $3");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "([\\.]$)" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("([\\.]$)");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\?]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\?]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\;]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\;]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\:]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\:]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\!]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\!]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\(]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\(]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\)]" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\)]");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[ ]+" );
+  rex = sregex::compile("[ ]+");
   replace = " ";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[ ]+$" );
+  rex = sregex::compile("[ ]+$");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "^[ ]+" );
+  rex = sregex::compile("^[ ]+");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
   return str_mod;
 }
-string tokenizePunct ( string str )
-{
+string tokenizePunct(string str) {
   string str_mod = str;
-  sregex rex = sregex::compile ( "(([^0-9])([\\,])([^0-9]))" );
-  string replace ( "$2 $3 $4" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  sregex rex = sregex::compile("(([^0-9])([\\,])([^0-9]))");
+  string replace("$2 $3 $4");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(([^0-9])([\\.])([^0-9]))" );
-  replace = ( "$2 $3 $4" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(([^0-9])([\\.])([^0-9]))");
+  replace = ("$2 $3 $4");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([A-Z]|[a-z]) ([\\.]) )" );
-  replace = ( " $2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([A-Z]|[a-z]) ([\\.]) )");
+  replace = (" $2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([A-Z]|[a-z]) ([\\.])$)" );
-  replace = ( " $2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([A-Z]|[a-z]) ([\\.])$)");
+  replace = (" $2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^([A-Z]|[a-z]) ([\\.]) )" );
-  replace = ( " $2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^([A-Z]|[a-z]) ([\\.]) )");
+  replace = (" $2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(([A-Z]|[a-z])([\\.]) ([A-Z]|[a-z])([\\.]) )" );
-  replace = ( "$2.$4. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(([A-Z]|[a-z])([\\.]) ([A-Z]|[a-z])([\\.]) )");
+  replace = ("$2.$4. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\?]" );
-  replace = ( " ? " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\?]");
+  replace = (" ? ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\;]" );
-  replace = ( " ; " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\;]");
+  replace = (" ; ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(([^0-9])([\\:])([^0-9]))" );
-  replace = ( "$2 $3 $4" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(([^0-9])([\\:])([^0-9]))");
+  replace = ("$2 $3 $4");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\!]" );
-  replace = ( " ! " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\!]");
+  replace = (" ! ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\(]" );
-  replace = ( " ( " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\(]");
+  replace = (" ( ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\\)]" );
-  replace = ( " ) " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\\)]");
+  replace = (" ) ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[\"]" );
-  replace = ( " \" " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("[\"]");
+  replace = (" \" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(num_ \\( ([^\\)]+) \\))" );
-  replace = ( "num_($2)" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(num_ \\( ([^\\)]+) \\))");
+  replace = ("num_($2)");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(ordinal_ \\( ([^\\)]*) \\))" );
-  replace = ( "ordinal_($2)" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(ordinal_ \\( ([^\\)]*) \\))");
+  replace = ("ordinal_($2)");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^([Mm]) \\.)" );
-  replace = ( "$2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^([Mm]) \\.)");
+  replace = ("$2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([Mm]) \\.)" );
-  replace = ( " $2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([Mm]) \\.)");
+  replace = (" $2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^([Dd]r) \\.)" );
-  replace = ( "$2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^([Dd]r) \\.)");
+  replace = ("$2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([Dd]r) \\.)" );
-  replace = ( " $2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([Dd]r) \\.)");
+  replace = (" $2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^([Mm]r) \\.)" );
-  replace = ( "$2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^([Mm]r) \\.)");
+  replace = ("$2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([Mm]r) \\.)" );
-  replace = ( " $2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([Mm]r) \\.)");
+  replace = (" $2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^([Mm]rs) \\.)" );
-  replace = ( "$2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^([Mm]rs) \\.)");
+  replace = ("$2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([Mm]rs) \\.)" );
-  replace = ( " $2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([Mm]rs) \\.)");
+  replace = (" $2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^([Nn]o) \\.)" );
-  replace = ( "$2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^([Nn]o) \\.)");
+  replace = ("$2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( ([Nn]o) \\.)" );
-  replace = ( " $2." );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( ([Nn]o) \\.)");
+  replace = (" $2.");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-// 	rex = sregex::compile ( "(^(([Jj]an)|([Ff]ev)|([Mm]ar)|([Aa]pr)|([Jj]un)|([Jj]ul)|([Aa]ug)|([Ss]ept)|([Oo]ct)|([Nn]ov)|([Dd]ec)) \\.)" );
-//         replace = ( "$2." );
-//         str_mod = regex_replace ( str_mod, rex, replace );
-//
-//         rex = sregex::compile ( "( (([Jj]an)|([Ff]ev)|([Mm]ar)|([Aa]pr)|([Jj]un)|([Jj]ul)|([Aa]ug)|([Ss]ept)|([Oo]ct)|([Nn]ov)|([Dd]ec)) \\.)" );
-//         replace = ( " $2." );
-//         str_mod = regex_replace ( str_mod, rex, replace );
-//
-// 	rex = sregex::compile ( "(^(([Gg]en)|([Cc]ol)) \\.)" );
-//         replace = ( "$2." );
-//         str_mod = regex_replace ( str_mod, rex, replace );
-//
-//         rex = sregex::compile ( "( (([Gg]en)|([Cc]ol)) \\.)" );
-//         replace = ( " $2." );
-//         str_mod = regex_replace ( str_mod, rex, replace );
+  // 	rex = sregex::compile (
+  // "(^(([Jj]an)|([Ff]ev)|([Mm]ar)|([Aa]pr)|([Jj]un)|([Jj]ul)|([Aa]ug)|([Ss]ept)|([Oo]ct)|([Nn]ov)|([Dd]ec))
+  // \\.)" );
+  //         replace = ( "$2." );
+  //         str_mod = regex_replace ( str_mod, rex, replace );
+  //
+  //         rex = sregex::compile ( "(
+  //         (([Jj]an)|([Ff]ev)|([Mm]ar)|([Aa]pr)|([Jj]un)|([Jj]ul)|([Aa]ug)|([Ss]ept)|([Oo]ct)|([Nn]ov)|([Dd]ec))
+  //         \\.)" ); replace = ( " $2." ); str_mod = regex_replace ( str_mod, rex, replace );
+  //
+  // 	rex = sregex::compile ( "(^(([Gg]en)|([Cc]ol)) \\.)" );
+  //         replace = ( "$2." );
+  //         str_mod = regex_replace ( str_mod, rex, replace );
+  //
+  //         rex = sregex::compile ( "( (([Gg]en)|([Cc]ol)) \\.)" );
+  //         replace = ( " $2." );
+  //         str_mod = regex_replace ( str_mod, rex, replace );
 
-  rex = sregex::compile ( "(^(([A-Z][a-z])) \\. )" );
-  replace = ( "$2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^(([A-Z][a-z])) \\. )");
+  replace = ("$2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( (([A-Z][a-z])) \\. )" );
-  replace = ( " $2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( (([A-Z][a-z])) \\. )");
+  replace = (" $2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "(^(([A-Z][a-z][a-z])) \\. )" );
-  replace = ( "$2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("(^(([A-Z][a-z][a-z])) \\. )");
+  replace = ("$2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "( (([A-Z][a-z][a-z])) \\. )" );
-  replace = ( " $2. " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("( (([A-Z][a-z][a-z])) \\. )");
+  replace = (" $2. ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[ ]+" );
+  rex = sregex::compile("[ ]+");
   replace = " ";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "^[ ]+" );
+  rex = sregex::compile("^[ ]+");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "[ ]+$" );
+  rex = sregex::compile("[ ]+$");
   replace = "";
-  str_mod = regex_replace ( str_mod, rex, replace );
+  str_mod = regex_replace(str_mod, rex, replace);
 
   return str_mod;
 }
 
-string normalizeStd ( string str )
-{
+string normalizeStd(string str) {
   string str_mod = str;
-  sregex rex = sregex::compile ( "(<skipped>)" );
-  string replace ( "" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  sregex rex = sregex::compile("(<skipped>)");
+  string replace("");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "-\n" );
-  replace = ( "" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("-\n");
+  replace = ("");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "\n" );
-  replace = ( " " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("\n");
+  replace = (" ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "&quot;" );
-  replace = ( "\"" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("&quot;");
+  replace = ("\"");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "&amp;" );
-  replace = ( "& " );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("&amp;");
+  replace = ("& ");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "&lt;" );
-  replace = ( "<" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("&lt;");
+  replace = ("<");
+  str_mod = regex_replace(str_mod, rex, replace);
 
-  rex = sregex::compile ( "&gt;" );
-  replace = ( ">" );
-  str_mod = regex_replace ( str_mod, rex, replace );
+  rex = sregex::compile("&gt;");
+  replace = (">");
+  str_mod = regex_replace(str_mod, rex, replace);
 
   return str_mod;
 }
 
-param copyParam ( param p )
-{
+param copyParam(param p) {
   param to_return;
   to_return.caseOn = p.caseOn;
   to_return.noPunct = p.noPunct;
@@ -708,11 +668,10 @@ param copyParam ( param p )
   to_return.sgmlInputs = p.sgmlInputs;
   to_return.tercomLike = p.tercomLike;
   to_return.printAlignments = p.printAlignments;
-  to_return.WER=p.WER;
+  to_return.WER = p.WER;
   return to_return;
 }
-string printParams ( param p )
-{
+string printParams(param p) {
   stringstream s;
   s << "caseOn = " << p.caseOn << endl;
   s << "noPunct = " << p.noPunct << endl;
@@ -729,24 +688,23 @@ string printParams ( param p )
   s << "verbose = " << p.verbose << endl;
   s << "count_verbose = " << p.count_verbose << endl;
   return s.str();
-
 }
-string join ( string delim, vector<string> arr )
-{
-  if ( ( int ) arr.size() == 0 ) return "";
-// 		if ((int)delim.compare("") == 0) delim = new String("");
-// 		String s = new String("");
+string join(string delim, vector<string> arr) {
+  if((int)arr.size() == 0)
+    return "";
+  // 		if ((int)delim.compare("") == 0) delim = new String("");
+  // 		String s = new String("");
   stringstream s;
-  s.str ( "" );
-  for ( int i = 0; i < ( int ) arr.size(); i++ ) {
-    if ( i == 0 ) {
-      s << arr.at ( i );
+  s.str("");
+  for(int i = 0; i < (int)arr.size(); i++) {
+    if(i == 0) {
+      s << arr.at(i);
     } else {
-      s << delim << arr.at ( i );
+      s << delim << arr.at(i);
     }
   }
   return s.str();
-// 		return "";
+  // 		return "";
 }
 
-}
+}  // namespace TERCPPNS_Tools

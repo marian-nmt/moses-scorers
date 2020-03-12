@@ -9,11 +9,10 @@
 #include <boost/thread/mutex.hpp>
 #endif
 
-#include "Types.h"
 #include "StatisticsBasedScorer.h"
+#include "Types.h"
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
 class ofdstream;
 class ifdstream;
@@ -29,9 +28,10 @@ class ScoreStats;
  * jar - location of meteor-*.jar (meteor-1.5.jar at time of writing)
  * lang - optional language code (default: en)
  * task - optional task (default: tune)
- * m - optional quoted, space delimited module string "exact stem synonym paraphrase" (default varies by language)
- * p - optional quoted, space delimited parameter string "alpha beta gamma delta" (default for tune: "0.5 1.0 0.5 0.5")
- * w - optional quoted, space delimited weight string "w_exact w_stem w_synonym w_paraphrase" (default for tune: "1.0 0.5 0.5 0.5")
+ * m - optional quoted, space delimited module string "exact stem synonym paraphrase" (default
+ * varies by language) p - optional quoted, space delimited parameter string "alpha beta gamma
+ * delta" (default for tune: "0.5 1.0 0.5 0.5") w - optional quoted, space delimited weight string
+ * "w_exact w_stem w_synonym w_paraphrase" (default for tune: "1.0 0.5 0.5 0.5")
  *
  * Usage with mert-moses.pl:
  * --mertargs="--sctype METEOR --scconfig jar:/path/to/meteor-1.5.jar"
@@ -39,8 +39,7 @@ class ScoreStats;
  * Usage with mert-moses.pl when using --batch-mira:
  * --batch-mira-args="--sctype METEOR --scconfig jar:/path/to/meteor-1.5.jar"
  */
-class MeteorScorer: public StatisticsBasedScorer
-{
+class MeteorScorer : public StatisticsBasedScorer {
 public:
   explicit MeteorScorer(const std::string& config = "");
   ~MeteorScorer();
@@ -76,7 +75,7 @@ private:
   ifdstream* m_from_meteor;
 #ifdef WITH_THREADS
   mutable boost::mutex mtx;
-#endif // WITH_THREADS
+#endif  // WITH_THREADS
 
   // data extracted from reference files
   std::vector<std::string> m_references;
@@ -85,9 +84,8 @@ private:
   // no copying allowed
   MeteorScorer(const MeteorScorer&);
   MeteorScorer& operator=(const MeteorScorer&);
-
 };
 
-}
+}  // namespace MosesTuning
 
-#endif // MERT_METEOR_SCORER_H_
+#endif  // MERT_METEOR_SCORER_H_

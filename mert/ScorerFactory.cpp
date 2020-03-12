@@ -1,29 +1,26 @@
 #include "ScorerFactory.h"
 
 #include <stdexcept>
-#include "Scorer.h"
-#include "BleuScorer.h"
 #include "BleuDocScorer.h"
-#include "PerScorer.h"
-#include "TerScorer.h"
+#include "BleuScorer.h"
 #include "CderScorer.h"
-#include "InterpolatedScorer.h"
-#include "SemposScorer.h"
-#include "PermutationScorer.h"
-#include "MeteorScorer.h"
-#include "M2Scorer.h"
 #include "GleuScorer.h"
 #include "HwcmScorer.h"
+#include "InterpolatedScorer.h"
+#include "M2Scorer.h"
+#include "MeteorScorer.h"
+#include "PerScorer.h"
+#include "PermutationScorer.h"
 #include "Reference.h"
+#include "Scorer.h"
+#include "SemposScorer.h"
+#include "TerScorer.h"
 
 using namespace std;
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
-
-vector<string> ScorerFactory::getTypes()
-{
+vector<string> ScorerFactory::getTypes() {
   vector<string> types;
   types.push_back(string("BLEU"));
   types.push_back(string("BLEUDOC"));
@@ -40,35 +37,34 @@ vector<string> ScorerFactory::getTypes()
   return types;
 }
 
-Scorer* ScorerFactory::getScorer(const string& type, const string& config)
-{
-  if (type == "BLEU") {
+Scorer* ScorerFactory::getScorer(const string& type, const string& config) {
+  if(type == "BLEU") {
     return new BleuScorer(config);
-  } else if (type == "BLEUDOC") {
+  } else if(type == "BLEUDOC") {
     return new BleuDocScorer(config);
-  } else if (type == "PER") {
+  } else if(type == "PER") {
     return new PerScorer(config);
-  } else if (type == "TER") {
+  } else if(type == "TER") {
     return new TerScorer(config);
-  } else if (type == "CDER") {
+  } else if(type == "CDER") {
     return new CderScorer(config, true);
-  } else if (type == "WER") {
+  } else if(type == "WER") {
     // CderScorer can compute both CDER and WER metric
     return new CderScorer(config, false);
-  } else if (type == "SEMPOS") {
+  } else if(type == "SEMPOS") {
     return new SemposScorer(config);
-  } else if (type == "M2SCORER") {
+  } else if(type == "M2SCORER") {
     return new M2Scorer(config);
-  } else if (type == "GLEU") {
+  } else if(type == "GLEU") {
     return new GleuScorer(config);
-  } else if ((type == "HAMMING") || (type == "KENDALL")) {
-    return (PermutationScorer*) new PermutationScorer(type, config);
-  } else if (type == "METEOR") {
+  } else if((type == "HAMMING") || (type == "KENDALL")) {
+    return (PermutationScorer*)new PermutationScorer(type, config);
+  } else if(type == "METEOR") {
     return new MeteorScorer(config);
-  } else if (type == "HWCM") {
+  } else if(type == "HWCM") {
     return new HwcmScorer(config);
   } else {
-    if (type.find(',') != string::npos) {
+    if(type.find(',') != string::npos) {
       return new InterpolatedScorer(type, config);
     } else {
       throw runtime_error("Unknown scorer type: " + type);
@@ -76,5 +72,4 @@ Scorer* ScorerFactory::getScorer(const string& type, const string& config)
   }
 }
 
-}
-
+}  // namespace MosesTuning

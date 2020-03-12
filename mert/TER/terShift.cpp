@@ -21,8 +21,7 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #include "terShift.h"
 
 using namespace std;
-namespace TERCPPNS_TERCpp
-{
+namespace TERCPPNS_TERCpp {
 
 // 	terShift::terShift()
 // 	{
@@ -42,69 +41,61 @@ namespace TERCPPNS_TERCpp
 // 		numSft=0;
 // 		numWsf=0;
 // 	}
-terShift::terShift ()
-{
+terShift::terShift() {
   start = 0;
   end = 0;
   moveto = 0;
   newloc = 0;
-  cost=1.0;
+  cost = 1.0;
   shifted.clear();
   alignment.clear();
   aftershift.clear();
 }
-terShift::terShift ( int _start, int _end, int _moveto, int _newloc )
-{
+terShift::terShift(int _start, int _end, int _moveto, int _newloc) {
   start = _start;
   end = _end;
   moveto = _moveto;
   newloc = _newloc;
-  cost=1.0;
+  cost = 1.0;
 }
 
-terShift::terShift ( int _start, int _end, int _moveto, int _newloc, vector<string> _shifted )
-{
+terShift::terShift(int _start, int _end, int _moveto, int _newloc, vector<string> _shifted) {
   start = _start;
   end = _end;
   moveto = _moveto;
   newloc = _newloc;
   shifted = _shifted;
-  cost=1.0;
+  cost = 1.0;
 }
-void terShift::set(terShift l_terShift)
-{
-  start=l_terShift.start;
-  end=l_terShift.end;
-  moveto=l_terShift.moveto;
-  newloc=l_terShift.newloc;
-  shifted=l_terShift.shifted;
-//         alignment=l_terShift.alignment;
-//         aftershift=l_terShift.aftershift;
+void terShift::set(terShift l_terShift) {
+  start = l_terShift.start;
+  end = l_terShift.end;
+  moveto = l_terShift.moveto;
+  newloc = l_terShift.newloc;
+  shifted = l_terShift.shifted;
+  //         alignment=l_terShift.alignment;
+  //         aftershift=l_terShift.aftershift;
 }
-void terShift::set(terShift *l_terShift)
-{
-  start=l_terShift->start;
-  end=l_terShift->end;
-  moveto=l_terShift->moveto;
-  newloc=l_terShift->newloc;
-  shifted=l_terShift->shifted;
-//         alignment=l_terShift->alignment;
-//         aftershift=l_terShift->aftershift;
+void terShift::set(terShift *l_terShift) {
+  start = l_terShift->start;
+  end = l_terShift->end;
+  moveto = l_terShift->moveto;
+  newloc = l_terShift->newloc;
+  shifted = l_terShift->shifted;
+  //         alignment=l_terShift->alignment;
+  //         aftershift=l_terShift->aftershift;
 }
 
-void terShift::erase()
-{
+void terShift::erase() {
   start = 0;
   end = 0;
   moveto = 0;
   newloc = 0;
-  cost=1.0;
+  cost = 1.0;
   shifted.clear();
   alignment.clear();
   aftershift.clear();
 }
-
-
 
 // 	string terShift::vectorToString(vector<string> vec)
 // 	{
@@ -116,47 +107,43 @@ void terShift::erase()
 // 		return retour;
 // 	}
 
-string terShift::toString()
-{
+string terShift::toString() {
   stringstream s;
-  s.str ( "" );
+  s.str("");
   s << "[" << start << ", " << end << ", " << moveto << "/" << newloc << "]";
-  if ( ( int ) shifted.size() > 0 ) {
-    s << " (" << vectorToString ( shifted ) << ")";
+  if((int)shifted.size() > 0) {
+    s << " (" << vectorToString(shifted) << ")";
   }
-//         s<< endl;
-//         if ( ( int ) shifted.size() > 0 )
-//         {
-//             s << " (" << vectorToString ( alignment ) << ")";
-//         }
-//         s<< endl;
-//         if ( ( int ) shifted.size() > 0 )
-//         {
-//             s << " (" << vectorToString ( aftershift ) << ")";
-//         }
+  //         s<< endl;
+  //         if ( ( int ) shifted.size() > 0 )
+  //         {
+  //             s << " (" << vectorToString ( alignment ) << ")";
+  //         }
+  //         s<< endl;
+  //         if ( ( int ) shifted.size() > 0 )
+  //         {
+  //             s << " (" << vectorToString ( aftershift ) << ")";
+  //         }
   return s.str();
 }
 
 /* The distance of the shift. */
-int terShift::distance()
-{
-  if ( moveto < start ) {
+int terShift::distance() {
+  if(moveto < start) {
     return start - moveto;
-  } else if ( moveto > end ) {
+  } else if(moveto > end) {
     return moveto - end;
   } else {
     return moveto - start;
   }
 }
 
-bool terShift::leftShift()
-{
-  return ( moveto < start );
+bool terShift::leftShift() {
+  return (moveto < start);
 }
 
-int terShift::size()
-{
-  return ( end - start ) + 1;
+int terShift::size() {
+  return (end - start) + 1;
 }
 // 	terShift terShift::operator=(terShift t)
 // 	{
@@ -164,5 +151,4 @@ int terShift::size()
 // 		return t;
 // 	}
 
-
-}
+}  // namespace TERCPPNS_TERCpp

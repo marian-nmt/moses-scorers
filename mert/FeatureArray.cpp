@@ -6,93 +6,82 @@
  *
  */
 
-#include <iostream>
-#include <fstream>
 #include "FeatureArray.h"
+#include <fstream>
+#include <iostream>
 #include "FileStream.h"
 #include "Util.h"
 
 using namespace std;
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
-
-FeatureArray::FeatureArray()
-  : m_index(0), m_num_features(0) {}
+FeatureArray::FeatureArray() : m_index(0), m_num_features(0) {}
 
 FeatureArray::~FeatureArray() {}
 
-void FeatureArray::savetxt(ostream* os)
-{
-  *os << FEATURES_TXT_BEGIN << " " << m_index << " " << m_array.size()
-      << " " << m_num_features << " " << m_features << endl;
-  for (featarray_t::iterator i = m_array.begin(); i != m_array.end(); ++i) {
+void FeatureArray::savetxt(ostream* os) {
+  *os << FEATURES_TXT_BEGIN << " " << m_index << " " << m_array.size() << " " << m_num_features
+      << " " << m_features << endl;
+  for(featarray_t::iterator i = m_array.begin(); i != m_array.end(); ++i) {
     i->savetxt(os);
     *os << endl;
   }
   *os << FEATURES_TXT_END << endl;
 }
 
-void FeatureArray::savebin(ostream* os)
-{
-  *os << FEATURES_BIN_BEGIN << " " << m_index << " " << m_array.size()
-      << " " << m_num_features << " " << m_features << endl;
-  for (featarray_t::iterator i = m_array.begin(); i != m_array.end(); ++i)
+void FeatureArray::savebin(ostream* os) {
+  *os << FEATURES_BIN_BEGIN << " " << m_index << " " << m_array.size() << " " << m_num_features
+      << " " << m_features << endl;
+  for(featarray_t::iterator i = m_array.begin(); i != m_array.end(); ++i)
     i->savebin(os);
 
   *os << FEATURES_BIN_END << endl;
 }
 
-
-void FeatureArray::save(ostream* os, bool bin)
-{
-  if (size() <= 0) return;
-  if (bin) {
+void FeatureArray::save(ostream* os, bool bin) {
+  if(size() <= 0)
+    return;
+  if(bin) {
     savebin(os);
   } else {
     savetxt(os);
   }
 }
 
-void FeatureArray::save(const string &file, bool bin)
-{
+void FeatureArray::save(const string& file, bool bin) {
   ofstream ofs(file.c_str(), ios::out);
-  if (!ofs) {
+  if(!ofs) {
     cerr << "Failed to open " << file << endl;
     exit(1);
   }
-  ostream *os = &ofs;
+  ostream* os = &ofs;
   save(os, bin);
   ofs.close();
 }
 
-void FeatureArray::save(bool bin)
-{
+void FeatureArray::save(bool bin) {
   save(&cout, bin);
 }
 
-void FeatureArray::loadbin(istream* is, size_t n)
-{
+void FeatureArray::loadbin(istream* is, size_t n) {
   FeatureStats entry(m_num_features);
-  for (size_t i = 0 ; i < n; i++) {
+  for(size_t i = 0; i < n; i++) {
     entry.loadbin(is);
     add(entry);
   }
 }
 
-void FeatureArray::loadtxt(istream* is, const SparseVector& sparseWeights, size_t n)
-{
+void FeatureArray::loadtxt(istream* is, const SparseVector& sparseWeights, size_t n) {
   FeatureStats entry(m_num_features);
 
-  for (size_t i=0 ; i < n; i++) {
+  for(size_t i = 0; i < n; i++) {
     entry.loadtxt(is, sparseWeights);
     add(entry);
   }
 }
 
-void FeatureArray::load(istream* is, const SparseVector& sparseWeights)
-{
+void FeatureArray::load(istream* is, const SparseVector& sparseWeights) {
   size_t number_of_entries = 0;
   bool binmode = false;
 
@@ -100,14 +89,14 @@ void FeatureArray::load(istream* is, const SparseVector& sparseWeights)
   string::size_type loc;
 
   getline(*is, stringBuf);
-  if (!is->good()) {
+  if(!is->good()) {
     return;
   }
 
-  if (!stringBuf.empty()) {
-    if ((loc = stringBuf.find(FEATURES_TXT_BEGIN)) == 0) {
+  if(!stringBuf.empty()) {
+    if((loc = stringBuf.find(FEATURES_TXT_BEGIN)) == 0) {
       binmode = false;
-    } else if ((loc = stringBuf.find(FEATURES_BIN_BEGIN)) == 0) {
+    } else if((loc = stringBuf.find(FEATURES_BIN_BEGIN)) == 0) {
       binmode = true;
     } else {
       TRACE_ERR("ERROR: FeatureArray::load(): Wrong header");
@@ -123,40 +112,38 @@ void FeatureArray::load(istream* is, const SparseVector& sparseWeights)
     m_features = stringBuf;
   }
 
-  if (binmode) {
+  if(binmode) {
     loadbin(is, number_of_entries);
   } else {
     loadtxt(is, sparseWeights, number_of_entries);
   }
 
   getline(*is, stringBuf);
-  if (!stringBuf.empty()) {
-    if ((loc = stringBuf.find(FEATURES_TXT_END)) != 0 &&
-        (loc = stringBuf.find(FEATURES_BIN_END)) != 0) {
+  if(!stringBuf.empty()) {
+    if((loc = stringBuf.find(FEATURES_TXT_END)) != 0
+       && (loc = stringBuf.find(FEATURES_BIN_END)) != 0) {
       TRACE_ERR("ERROR: FeatureArray::load(): Wrong footer");
       return;
     }
   }
 }
 
-void FeatureArray::merge(FeatureArray& e)
-{
-  //dummy implementation
-  for (size_t i = 0; i < e.size(); i++)
+void FeatureArray::merge(FeatureArray& e) {
+  // dummy implementation
+  for(size_t i = 0; i < e.size(); i++)
     add(e.get(i));
 }
 
-bool FeatureArray::check_consistency() const
-{
+bool FeatureArray::check_consistency() const {
   const size_t sz = NumberOfFeatures();
-  if (sz == 0)
+  if(sz == 0)
     return true;
 
-  for (featarray_t::const_iterator i = m_array.begin(); i != m_array.end(); i++) {
-    if (i->size() != sz)
+  for(featarray_t::const_iterator i = m_array.begin(); i != m_array.end(); i++) {
+    if(i->size() != sz)
       return false;
   }
   return true;
 }
 
-}
+}  // namespace MosesTuning

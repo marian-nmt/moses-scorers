@@ -25,26 +25,21 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #include <iostream>
 
 using namespace std;
-namespace TERCPPNS_HashMapSpace
-{
+namespace TERCPPNS_HashMapSpace {
 
-class stringHasher
-{
+class stringHasher {
 private:
   long m_hashKey;
   string m_key;
   string m_value;
 
 public:
-  stringHasher ( long cle, string cleTxt, string valueTxt );
+  stringHasher(long cle, string cleTxt, string valueTxt);
   long getHashKey();
   string getKey();
   string getValue();
-  void setValue ( string value );
-
-
+  void setValue(string value);
 };
 
-
-}
+}  // namespace TERCPPNS_HashMapSpace
 #endif

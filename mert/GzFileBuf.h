@@ -1,11 +1,10 @@
 #ifndef MERT_GZFILEBUF_H_
 #define MERT_GZFILEBUF_H_
 
-#include <streambuf>
 #include <zlib.h>
+#include <streambuf>
 
-class GzFileBuf : public std::streambuf
-{
+class GzFileBuf : public std::streambuf {
 public:
   explicit GzFileBuf(const char* filename);
   virtual ~GzFileBuf();
@@ -16,9 +15,9 @@ protected:
   // Read one character
   virtual int_type underflow();
 
-  virtual std::streampos seekpos(
-    std::streampos sp,
-    std::ios_base::openmode which = std::ios_base::in | std::ios_base::out);
+  virtual std::streampos seekpos(std::streampos sp,
+                                 std::ios_base::openmode which
+                                 = std::ios_base::in | std::ios_base::out);
 
   virtual std::streamsize xsgetn(char* s, std::streamsize num);
 

@@ -4,8 +4,7 @@
 #include <boost/unordered_map.hpp>
 #include <string>
 
-namespace mert
-{
+namespace mert {
 
 /**
  * A map to handle vocabularies to calculate
@@ -13,8 +12,7 @@ namespace mert
  *
  * TODO: replace this with more efficient data structure.
  */
-class Vocabulary
-{
+class Vocabulary {
 public:
   typedef boost::unordered_map<std::string, int>::iterator iterator;
   typedef boost::unordered_map<std::string, int>::const_iterator const_iterator;
@@ -28,50 +26,29 @@ public:
   /**
    * Return true iff the specified "str" is found in the container.
    */
-  bool Lookup(const std::string&str , int* v) const;
+  bool Lookup(const std::string& str, int* v) const;
 
-  void clear() {
-    m_vocab.clear();
-  }
+  void clear() { m_vocab.clear(); }
 
-  bool empty() const {
-    return m_vocab.empty();
-  }
+  bool empty() const { return m_vocab.empty(); }
 
-  std::size_t size() const {
-    return m_vocab.size();
-  }
+  std::size_t size() const { return m_vocab.size(); }
 
-  iterator find(const std::string& str) {
-    return m_vocab.find(str);
-  }
-  const_iterator find(const std::string& str) const {
-    return m_vocab.find(str);
-  }
+  iterator find(const std::string& str) { return m_vocab.find(str); }
+  const_iterator find(const std::string& str) const { return m_vocab.find(str); }
 
-  int& operator[](const std::string& str) {
-    return m_vocab[str];
-  }
+  int& operator[](const std::string& str) { return m_vocab[str]; }
 
-  iterator begin() {
-    return m_vocab.begin();
-  }
-  const_iterator begin() const {
-    return m_vocab.begin();
-  }
-  iterator end() {
-    return m_vocab.end();
-  }
-  const_iterator end() const {
-    return m_vocab.end();
-  }
+  iterator begin() { return m_vocab.begin(); }
+  const_iterator begin() const { return m_vocab.begin(); }
+  iterator end() { return m_vocab.end(); }
+  const_iterator end() const { return m_vocab.end(); }
 
 private:
   boost::unordered_map<std::string, int> m_vocab;
 };
 
-class VocabularyFactory
-{
+class VocabularyFactory {
 public:
   static Vocabulary* GetVocabulary();
   static void SetVocabulary(Vocabulary* vocab);
@@ -81,6 +58,6 @@ private:
   virtual ~VocabularyFactory() {}
 };
 
-} // namespace mert
+}  // namespace mert
 
 #endif  // MERT_VOCABULARY_H_

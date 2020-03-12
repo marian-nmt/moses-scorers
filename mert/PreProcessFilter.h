@@ -4,9 +4,7 @@
 
 #if defined(__GLIBCXX__) || defined(__GLIBCPP__)
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 class ofdstream;
 class ifdstream;
@@ -15,8 +13,7 @@ class ifdstream;
  * This class runs the filter command in a child process and
  * then use this filter to process given sentences.
  */
-class PreProcessFilter
-{
+class PreProcessFilter {
 public:
   explicit PreProcessFilter(const std::string& filterCommand);
   std::string ProcessSentence(const std::string& sentence);
@@ -27,6 +24,6 @@ private:
   ifdstream* m_fromFilter;
 };
 
-}
+}  // namespace MosesTuning
 
 #endif

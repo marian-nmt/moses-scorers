@@ -1,29 +1,26 @@
 #ifndef MERT_TIMER_H_
 #define MERT_TIMER_H_
 
+#include <stdint.h>
 #include <ostream>
 #include <string>
-#include <stdint.h>
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
-
-class Timer
-{
+class Timer {
 private:
   // Time values are stored in microseconds.
   struct CPUTime {
-    uint64_t user_time;                 // user CPU time
-    uint64_t sys_time;                  // system CPU time
+    uint64_t user_time;  // user CPU time
+    uint64_t sys_time;   // system CPU time
 
-    CPUTime() : user_time(0), sys_time(0) { }
+    CPUTime() : user_time(0), sys_time(0) {}
   };
 
   void GetCPUTimeMicroSeconds(CPUTime* cpu_time) const;
 
   bool m_is_running;
-  uint64_t m_wall;                      // wall-clock time in microseconds
+  uint64_t m_wall;  // wall-clock time in microseconds
   CPUTime m_start_time;
 
   // No copying allowed
@@ -35,10 +32,7 @@ public:
    * 'm_is_running' is initially false. A timer needs to be explicitly started
    * using 'start'.
    */
-  Timer()
-    : m_is_running(false),
-      m_wall(0),
-      m_start_time() {}
+  Timer() : m_is_running(false), m_wall(0), m_start_time() {}
 
   ~Timer() {}
 
@@ -61,9 +55,7 @@ public:
 
   /**
    */
-  bool is_running() const {
-    return m_is_running;
-  }
+  bool is_running() const { return m_is_running; }
 
   /**
    * Return the total time in seconds that the timer has been in the
@@ -99,9 +91,8 @@ public:
  * for an ostream 'os' and a timer 't'.  For example, "cout << t" will
  * print out the total amount of time 't' has been "running".
  */
-inline std::ostream& operator<<(std::ostream& os, const Timer& t)
-{
-  if (t.is_running()) {
+inline std::ostream& operator<<(std::ostream& os, const Timer& t) {
+  if(t.is_running()) {
     os << t.ToString();
   } else {
     os << "timer is not running.";
@@ -109,7 +100,6 @@ inline std::ostream& operator<<(std::ostream& os, const Timer& t)
   return os;
 }
 
-}
-
+}  // namespace MosesTuning
 
 #endif  // MERT_TIMER_H_

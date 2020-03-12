@@ -1,6 +1,6 @@
 #include <cstdlib>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -10,12 +10,11 @@
 
 using namespace MosesTuning;
 
-//float score(std::string scorerType, stdstd::vector<std::string> refFiles, std::vector<std::string> cands, std::string scorerConfig = "", std::string postproc = "") {
+// float score(std::string scorerType, stdstd::vector<std::string> refFiles,
+// std::vector<std::string> cands, std::string scorerConfig = "", std::string postproc = "") {
 
-
-int main(int argc, char **argv)
-{
-  if (argc == 1) {
+int main(int argc, char **argv) {
+  if(argc == 1) {
     std::cerr << "Usage: ./run-scorer sctype ref1 < candidate > scores" << std::endl;
     return 1;
   }
@@ -30,7 +29,7 @@ int main(int argc, char **argv)
   ScoreStats scoreStats;
   size_t sid = 0;
 
-  while (getline(std::cin, hyp)) {
+  while(getline(std::cin, hyp)) {
     scorer->prepareStats(sid, hyp, scoreStats);
     ++sid;
   }

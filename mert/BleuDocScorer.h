@@ -4,24 +4,21 @@
 #include <string>
 #include <vector>
 
-#include "Types.h"
+#include "BleuScorer.h"
+#include "ScopedVector.h"
 #include "ScoreData.h"
 #include "StatisticsBasedScorer.h"
-#include "ScopedVector.h"
-#include "BleuScorer.h"
+#include "Types.h"
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
 /**
  * Bleu document scoring
  *
  * Needs xml reference files, and nbest lists where sentences are separated by '\n'
  */
-class BleuDocScorer : public BleuScorer
-{
+class BleuDocScorer : public BleuScorer {
 public:
-
   explicit BleuDocScorer(const std::string& config = "");
   ~BleuDocScorer();
 
@@ -54,12 +51,12 @@ private:
 /* /\** Computes sentence-level BLEU score given a background corpus. */
 /*  * This function is used in batch MIRA. */
 /*  *\/ */
-/* float sentenceLevelBackgroundBleu(const std::vector<float>& sent, const std::vector<float>& bg); */
+/* float sentenceLevelBackgroundBleu(const std::vector<float>& sent, const std::vector<float>& bg);
+ */
 
 /* /\** */
 /*  * Computes plain old BLEU from a vector of stats */
 /*  *\/ */
 /* float unsmoothedBleu(const std::vector<float>& stats); */
 
-}
-
+}  // namespace MosesTuning

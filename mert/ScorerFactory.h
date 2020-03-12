@@ -1,17 +1,14 @@
 #ifndef MERT_SCORER_FACTORY_H_
 #define MERT_SCORER_FACTORY_H_
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 class Scorer;
 
-class ScorerFactory
-{
+class ScorerFactory {
 public:
   static std::vector<std::string> getTypes();
 
@@ -22,6 +19,6 @@ private:
   ~ScorerFactory() {}
 };
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_SCORER_FACTORY_H_

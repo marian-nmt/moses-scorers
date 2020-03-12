@@ -1,11 +1,11 @@
 #ifndef MERT_SEMPOSSCORER_H_
 #define MERT_SEMPOSSCORER_H_
 
+#include <boost/scoped_ptr.hpp>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 #include "Scorer.h"
 
@@ -17,31 +17,24 @@
 #include "SemposOverlapping.h"
 #include "StatisticsBasedScorer.h"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 /**
  * This class represents sempos based metrics.
  */
-class SemposScorer: public StatisticsBasedScorer
-{
+class SemposScorer : public StatisticsBasedScorer {
 public:
   explicit SemposScorer(const std::string& config);
   ~SemposScorer();
 
   virtual void setReferenceFiles(const std::vector<std::string>& referenceFiles);
   virtual void prepareStats(std::size_t sindex, const std::string& text, ScoreStats& entry);
-  virtual std::size_t NumberOfScores() const {
-    return m_ovr->NumberOfScores();
-  }
+  virtual std::size_t NumberOfScores() const { return m_ovr->NumberOfScores(); }
   virtual float calculateScore(const std::vector<ScoreStatsType>& comps) const {
     return m_ovr->calculateScore(comps);
   }
 
-  bool EnableDebug() const {
-    return m_enable_debug;
-  }
+  bool EnableDebug() const { return m_enable_debug; }
 
   float weight(int item) const;
 
@@ -70,6 +63,6 @@ private:
   SemposScorer& operator=(const SemposScorer&);
 };
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_SEMPOSSCORER_H_

@@ -3,18 +3,15 @@
 
 #include <cstdlib>
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 // thread *un*safe singleton.
 // TODO: replace this with thread-safe singleton.
 template <typename T>
-class Singleton
-{
+class Singleton {
 public:
   static T* GetInstance() {
-    if (m_instance == NULL) {
+    if(m_instance == NULL) {
       m_instance = new T;
     }
     return m_instance;
@@ -33,6 +30,6 @@ private:
 template <typename T>
 T* Singleton<T>::m_instance = NULL;
 
-}
+}  // namespace MosesTuning
 
 #endif  // MERT_SINGLETON_H_

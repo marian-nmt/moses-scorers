@@ -1,34 +1,30 @@
 #pragma once
 
+#include <algorithm>
+#include <boost/algorithm/string.hpp>
 #include <cmath>
-#include <string>
-#include <vector>
-#include <set>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <limits>
 #include <map>
 #include <queue>
-#include <iostream>
-#include <fstream>
-#include <iterator>
-#include <algorithm>
-#include <limits>
+#include <set>
 #include <sstream>
-#include <boost/algorithm/string.hpp>
+#include <string>
+#include <vector>
 
+namespace MosesTuning {
 
-
-namespace MosesTuning
-{
-
-namespace M2
-{
+namespace M2 {
 
 typedef std::vector<float> Stats;
 
 typedef std::vector<std::string> Sentence;
 
-std::ostream& operator<<(std::ostream& o, Sentence s);
+std::ostream &operator<<(std::ostream &o, Sentence s);
 
-const std::string ToLower(const std::string& str);
+const std::string ToLower(const std::string &str);
 
 struct Annot {
   size_t i;
@@ -40,16 +36,14 @@ struct Annot {
   size_t annotator;
 
   bool operator<(Annot a) const {
-    return i < a.i || (i == a.i && j < a.j)
-           || (i == a.i && j == a.j && annotator < a.annotator)
-           || (i == a.i && j == a.j && annotator == a.annotator && transform(edit) < transform(a.edit));
+    return i < a.i || (i == a.i && j < a.j) || (i == a.i && j == a.j && annotator < a.annotator)
+           || (i == a.i && j == a.j && annotator == a.annotator
+               && transform(edit) < transform(a.edit));
   }
 
-  bool operator==(Annot a) const {
-    return (!(*this < a) && !(a < *this));
-  }
+  bool operator==(Annot a) const { return (!(*this < a) && !(a < *this)); }
 
-  static std::string transform(const std::string& e);
+  static std::string transform(const std::string &e);
 
   static bool lowercase;
 };
@@ -67,7 +61,7 @@ typedef std::vector<Unit> M2File;
 
 struct Edit {
   Edit(float c = 1.0, size_t ch = 0, size_t unch = 1, std::string e = "")
-    : cost(c), changed(ch), unchanged(unch), edit(e) {}
+      : cost(c), changed(ch), unchanged(unch), edit(e) {}
 
   float cost;
   size_t changed;
@@ -75,18 +69,14 @@ struct Edit {
   std::string edit;
 };
 
-Edit operator+(Edit& e1, Edit& e2);
+Edit operator+(Edit &e1, Edit &e2);
 
 struct Vertex {
   Vertex(size_t a = 0, size_t b = 0) : i(a), j(b) {}
 
-  bool operator<(const Vertex &v) const {
-    return i < v.i || (i == v.i && j < v.j);
-  }
+  bool operator<(const Vertex &v) const { return i < v.i || (i == v.i && j < v.j); }
 
-  bool operator==(const Vertex &v) const {
-    return i == v.i && j == v.j;
-  }
+  bool operator==(const Vertex &v) const { return i == v.i && j == v.j; }
 
   size_t i;
   size_t j;
@@ -94,11 +84,9 @@ struct Vertex {
 
 struct Edge {
   Edge(Vertex vv = Vertex(), Vertex uu = Vertex(), Edit editt = Edit())
-    : v(vv), u(uu), edit(editt) {}
+      : v(vv), u(uu), edit(editt) {}
 
-  bool operator<(const Edge &e) const {
-    return v < e.v || (v == e.v && u < e.u);
-  }
+  bool operator<(const Edge &e) const { return v < e.v || (v == e.v && u < e.u); }
 
   Vertex v;
   Vertex u;
@@ -111,12 +99,9 @@ typedef std::vector<size_t> Row;
 typedef std::vector<Row> Matrix;
 
 struct Info {
-  Info(Vertex vv = Vertex(), Edit editt = Edit())
-    : v(vv), edit(editt) {}
+  Info(Vertex vv = Vertex(), Edit editt = Edit()) : v(vv), edit(editt) {}
 
-  bool operator<(const Info &i) const {
-    return v < i.v;
-  }
+  bool operator<(const Info &i) const { return v < i.v; }
 
   Vertex v;
   Edit edit;
@@ -129,8 +114,7 @@ typedef std::vector<TrackRow> TrackMatrix;
 typedef std::set<Vertex> Vertices;
 typedef std::set<Edge> Edges;
 
-class M2
-{
+class M2 {
 private:
   M2File m_m2;
 
@@ -140,19 +124,17 @@ private:
   bool m_verbose;
 
 public:
-  M2() : m_max_unchanged(2), m_beta(0.5), m_lowercase(true), m_verbose(false) { }
+  M2() : m_max_unchanged(2), m_beta(0.5), m_lowercase(true), m_verbose(false) {}
   M2(size_t max_unchanged, float beta, bool truecase, bool verbose = false)
-    : m_max_unchanged(max_unchanged), m_beta(beta), m_lowercase(!truecase), m_verbose(verbose) {
+      : m_max_unchanged(max_unchanged), m_beta(beta), m_lowercase(!truecase), m_verbose(verbose) {
     if(!m_lowercase) {
       Annot::lowercase = false;
     }
   }
 
-  float Beta() {
-    return m_beta;
-  }
+  float Beta() { return m_beta; }
 
-  void ReadM2(const std::string& filename) {
+  void ReadM2(const std::string &filename) {
     std::ifstream m2file(filename.c_str());
     std::string line;
 
@@ -211,9 +193,9 @@ public:
     size_t n = s1.size();
     size_t m = s2.size();
 
-    if (n == 0)
+    if(n == 0)
       return m;
-    if (m == 0)
+    if(m == 0)
       return n;
 
     d.resize(n + 1, Row(m + 1, 0));
@@ -233,7 +215,7 @@ public:
     int cost;
     for(size_t i = 1; i <= n; ++i) {
       for(size_t j = 1; j <= m; ++j) {
-        if(Annot::transform(s1[i-1]) == Annot::transform(s2[j-1]))
+        if(Annot::transform(s1[i - 1]) == Annot::transform(s2[j - 1]))
           cost = 0;
         else
           cost = 2;
@@ -249,12 +231,12 @@ public:
         if(d[i][j] == down)
           bt[i][j].insert(Info(Vertex(i - 1, j), Edit(1, 1, 0, "")));
         if(d[i][j] == diag)
-          bt[i][j].insert(Info(Vertex(i - 1, j - 1), cost ? Edit(1, 1, 0, s2[j - 1]) : Edit(1, 0, 1, s2[j - 1]) ));
+          bt[i][j].insert(Info(Vertex(i - 1, j - 1),
+                               cost ? Edit(1, 1, 0, s2[j - 1]) : Edit(1, 0, 1, s2[j - 1])));
       }
     }
     return d[n][m];
   }
-
 
   void BuildGraph(const TrackMatrix &bt, Vertices &V, Edges &E) {
     Vertex start(bt.size() - 1, bt[0].size() - 1);
@@ -267,8 +249,7 @@ public:
       if(V.count(v) > 0)
         continue;
       V.insert(v);
-      for(Track::iterator it = bt[v.i][v.j].begin();
-          it != bt[v.i][v.j].end(); ++it) {
+      for(Track::iterator it = bt[v.i][v.j].begin(); it != bt[v.i][v.j].end(); ++it) {
         Edge e(it->v, v, it->edit);
         E.insert(e);
         if(V.count(e.v) == 0)
@@ -283,9 +264,7 @@ public:
         for(Edges::iterator it2 = E.begin(); it2 != E.end(); ++it2) {
           if(it1->u == it2->v) {
             Edge e = *it1 + *it2;
-            if(e.edit.changed > 0 &&
-                e.edit.unchanged <= m_max_unchanged &&
-                E.count(e) == 0)
+            if(e.edit.changed > 0 && e.edit.unchanged <= m_max_unchanged && E.count(e) == 0)
               newE.insert(e);
           }
         }
@@ -297,14 +276,14 @@ public:
   void AddWeights(Edges &E, const Unit &u, size_t aid) {
     for(Edges::iterator it1 = E.begin(); it1 != E.end(); ++it1) {
       if(it1->edit.changed > 0) {
-        const_cast<float&>(it1->edit.cost) += 0.001;
+        const_cast<float &>(it1->edit.cost) += 0.001;
         for(Annots::iterator it2 = u.second.begin(); it2 != u.second.end(); ++it2) {
           // if matches an annotator
           if(it1->v.i == it2->i && it1->u.i == it2->j
-              && Annot::transform(it1->edit.edit) == Annot::transform(it2->edit)
-              && it2->annotator == aid) {
+             && Annot::transform(it1->edit.edit) == Annot::transform(it2->edit)
+             && it2->annotator == aid) {
             int newWeight = -(m_max_unchanged + 1) * E.size();
-            const_cast<float&>(it1->edit.cost) = newWeight;
+            const_cast<float &>(it1->edit.cost) = newWeight;
           }
         }
       }
@@ -337,11 +316,11 @@ public:
 
     Vertex v = *V.rbegin();
     while(true) {
-      //std::cout << predecessor[v] << " -> " << v << std::endl;
+      // std::cout << predecessor[v] << " -> " << v << std::endl;
       Edges::iterator it = E.find(Edge(predecessor[v], v));
       if(it != E.end()) {
         Edge f = *it;
-        //std::cout << f << std::endl;
+        // std::cout << f << std::endl;
         newE.insert(f);
 
         v = predecessor[v];
@@ -357,18 +336,15 @@ public:
   }
 
   void AddStats(const std::vector<Edges> &Es, const Unit &u, Stats &stats, size_t line) {
-
     std::map<size_t, Stats> statsPerAnnotator;
-    for(std::set<size_t>::iterator it = u.third.begin();
-        it != u.third.end(); ++it) {
+    for(std::set<size_t>::iterator it = u.third.begin(); it != u.third.end(); ++it) {
       statsPerAnnotator[*it] = Stats(4, 0);
     }
 
     for(Annots::iterator it = u.second.begin(); it != u.second.end(); it++)
       statsPerAnnotator[it->annotator][2]++;
 
-    for(std::set<size_t>::iterator ait = u.third.begin();
-        ait != u.third.end(); ++ait) {
+    for(std::set<size_t>::iterator ait = u.third.begin(); ait != u.third.end(); ++ait) {
       for(Edges::iterator eit = Es[*ait].begin(); eit != Es[*ait].end(); ++eit) {
         if(eit->edit.changed > 0) {
           statsPerAnnotator[*ait][1]++;
@@ -385,15 +361,15 @@ public:
       }
     }
     size_t bestAnnot = 0;
-    float  bestF = -1;
-    for(std::set<size_t>::iterator it = u.third.begin();
-        it != u.third.end(); ++it) {
+    float bestF = -1;
+    for(std::set<size_t>::iterator it = u.third.begin(); it != u.third.end(); ++it) {
       Stats localStats = stats;
       localStats[0] += statsPerAnnotator[*it][0];
       localStats[1] += statsPerAnnotator[*it][1];
       localStats[2] += statsPerAnnotator[*it][2];
       if(m_verbose)
-        std::cerr << *it << " : " << localStats[0] << " " << localStats[1] << " " << localStats[2] << std::endl;
+        std::cerr << *it << " : " << localStats[0] << " " << localStats[1] << " " << localStats[2]
+                  << std::endl;
       float f = FScore(localStats);
       if(m_verbose)
         std::cerr << f << std::endl;
@@ -442,8 +418,7 @@ public:
     stats[3] = unit.first.size();
   }
 
-
-  float FScore(const Stats& stats) {
+  float FScore(const Stats &stats) {
     float p = 1.0;
     if(stats[1] != 0)
       p = (float)stats[0] / (float)stats[1];
@@ -459,7 +434,7 @@ public:
     return f;
   }
 
-  void FScore(const Stats& stats, float &p, float &r, float &f) {
+  void FScore(const Stats &stats, float &p, float &r, float &f) {
     p = 1.0;
     if(stats[1] != 0)
       p = (float)stats[0] / (float)stats[1];
@@ -475,6 +450,6 @@ public:
   }
 };
 
-}
+}  // namespace M2
 
-}
+}  // namespace MosesTuning

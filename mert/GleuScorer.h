@@ -13,8 +13,7 @@
 #include "StatisticsBasedScorer.h"
 #include "Types.h"
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
 const std::string ToLower(const std::string& str);
 size_t NumberOfNgrams(const NgramCounts& counts, size_t n);
@@ -22,8 +21,7 @@ size_t NumberOfNgrams(const NgramCounts& counts, size_t n);
 /**
  * Gleu scoring
  */
-class GleuScorer: public StatisticsBasedScorer
-{
+class GleuScorer : public StatisticsBasedScorer {
 public:
   explicit GleuScorer(const std::string& config = "");
   ~GleuScorer();
@@ -32,11 +30,10 @@ public:
   virtual void prepareStats(std::size_t sid, const std::string& text, ScoreStats& entry);
   virtual statscore_t calculateScore(const std::vector<ScoreStatsType>& comps) const;
 
-  virtual std::size_t NumberOfScores() const {
-    return NumberOfReferences() * (2 * m_order + 1);
-  }
+  virtual std::size_t NumberOfScores() const { return NumberOfReferences() * (2 * m_order + 1); }
   virtual std::size_t NumberOfReferences() const {
-    // TODO: an ugly hack for knowing the number of multiple references before reading reference files
+    // TODO: an ugly hack for knowing the number of multiple references before reading reference
+    // files
     return m_numrefs;
   }
 
@@ -45,20 +42,31 @@ public:
     return totals[m_order * 2];
   }
 
-  void CalcGleuStats(const std::string& hypText, const std::vector<NgramCounts>& counts, ScoreStats& entry) const;
-  float calculateGleu(const std::vector<ScoreStatsType>& stats, bool smooth=false) const;
+  void CalcGleuStats(const std::string& hypText,
+                     const std::vector<NgramCounts>& counts,
+                     ScoreStats& entry) const;
+  float calculateGleu(const std::vector<ScoreStatsType>& stats, bool smooth = false) const;
 
   const std::vector<NgramCounts>& GetReference(size_t sid) const {
-    UTIL_THROW_IF2(sid >= m_references.size(), "Sentence id (" << sid << ") not found in reference set.");
+    UTIL_THROW_IF2(sid >= m_references.size(),
+                   "Sentence id (" << sid << ") not found in reference set.");
     return *(m_references.get())[sid];
   }
 
 private:
-  size_t CountNgrams(const std::string& line, NgramCounts& counts, unsigned int n, bool is_testing=false) const;
-  void CountDiffNgrams(const NgramCounts& countsA, const NgramCounts& countsB, NgramCounts& resultCounts) const;
+  size_t CountNgrams(const std::string& line,
+                     NgramCounts& counts,
+                     unsigned int n,
+                     bool is_testing = false) const;
+  void CountDiffNgrams(const NgramCounts& countsA,
+                       const NgramCounts& countsB,
+                       NgramCounts& resultCounts) const;
 
-  std::vector<ScoreStatsType> CalcGleuStatsForSingleRef(const NgramCounts& hypCounts, const NgramCounts& srcCounts, const NgramCounts& refCounts) const;
-  float calculateGleuForSingleRef(const std::vector<ScoreStatsType>& comps, bool smooth=false) const;
+  std::vector<ScoreStatsType> CalcGleuStatsForSingleRef(const NgramCounts& hypCounts,
+                                                        const NgramCounts& srcCounts,
+                                                        const NgramCounts& refCounts) const;
+  float calculateGleuForSingleRef(const std::vector<ScoreStatsType>& comps,
+                                  bool smooth = false) const;
 
   // maximum order of ngrams
   size_t m_order;
@@ -80,6 +88,4 @@ private:
   GleuScorer& operator=(const GleuScorer&);
 };
 
-
-}
-
+}  // namespace MosesTuning

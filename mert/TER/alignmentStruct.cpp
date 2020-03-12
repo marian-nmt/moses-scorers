@@ -21,26 +21,21 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #include "alignmentStruct.h"
 
 using namespace std;
-namespace TERCPPNS_TERCpp
-{
-string alignmentStruct::toString()
-{
+namespace TERCPPNS_TERCpp {
+string alignmentStruct::toString() {
   stringstream s;
-// 	s << "nword : " << vectorToString(nwords)<<endl;
-// 	s << "alignment" << vectorToString(alignment)<<endl;
-// 	s << "afterShift" << vectorToString(alignment)<<endl;
-  s << "Nothing to be printed" <<endl;
+  // 	s << "nword : " << vectorToString(nwords)<<endl;
+  // 	s << "alignment" << vectorToString(alignment)<<endl;
+  // 	s << "afterShift" << vectorToString(alignment)<<endl;
+  s << "Nothing to be printed" << endl;
   return s.str();
 }
-void alignmentStruct::set(alignmentStruct l_alignmentStruct)
-{
-  nwords=l_alignmentStruct.nwords; // The words we shifted
-  alignment=l_alignmentStruct.alignment ; // for pra_more output
-  aftershift=l_alignmentStruct.aftershift; // for pra_more output
-  cost=l_alignmentStruct.cost;
+void alignmentStruct::set(alignmentStruct l_alignmentStruct) {
+  nwords = l_alignmentStruct.nwords;          // The words we shifted
+  alignment = l_alignmentStruct.alignment;    // for pra_more output
+  aftershift = l_alignmentStruct.aftershift;  // for pra_more output
+  cost = l_alignmentStruct.cost;
 }
-
-
 
 // 	alignmentStruct::alignmentStruct()
 // 	{
@@ -77,7 +72,8 @@ void alignmentStruct::set(alignmentStruct l_alignmentStruct)
 // 		cost=1.0;
 // 	}
 
-// 	alignmentStruct::alignmentStruct (int _start, int _end, int _moveto, int _newloc, vector<string> _shifted)
+// 	alignmentStruct::alignmentStruct (int _start, int _end, int _moveto, int _newloc, vector<string>
+// _shifted)
 // 	{
 // 		start = _start;
 // 		end = _end;
@@ -140,5 +136,4 @@ void alignmentStruct::set(alignmentStruct l_alignmentStruct)
 // 		return t;
 // 	}
 
-
-}
+}  // namespace TERCPPNS_TERCpp

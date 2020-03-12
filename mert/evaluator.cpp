@@ -1,15 +1,15 @@
+#include <getopt.h>
+#include <algorithm>
+#include <cmath>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <getopt.h>
-#include <cmath>
 
 #if defined __MINGW32__
 #include <ctime>
-#endif // defined
+#endif  // defined
 
 #include "Scorer.h"
 #include "ScorerFactory.h"
@@ -21,17 +21,14 @@
 using namespace std;
 using namespace MosesTuning;
 
-namespace
-{
+namespace {
 
 Scorer* g_scorer = NULL;
 bool g_has_more_files = false;
 bool g_has_more_scorers = false;
 const float g_alpha = 0.05;
 
-
-class EvaluatorUtil
-{
+class EvaluatorUtil {
 public:
   static void evaluate(const string& candFile, int bootstrap, bool nbest_mode);
   static float average(const vector<float>& list);
@@ -45,18 +42,17 @@ private:
 };
 
 // load hypothesis from candidate output
-vector<ScoreStats> EvaluatorUtil::loadCand(const string& candFile)
-{
-
+vector<ScoreStats> EvaluatorUtil::loadCand(const string& candFile) {
   ifstream cand(candFile.c_str());
-  if (!cand.good()) throw runtime_error("Error opening candidate file");
+  if(!cand.good())
+    throw runtime_error("Error opening candidate file");
 
   vector<ScoreStats> entries;
 
   // Loading sentences and preparing statistics
   ScoreStats scoreentry;
   string line;
-  while (getline(cand, line)) {
+  while(getline(cand, line)) {
     g_scorer->prepareStats(entries.size(), line, scoreentry);
     entries.push_back(scoreentry);
   }
@@ -79,9 +75,7 @@ vector<ScoreStats> EvaluatorUtil::loadNBest(const string& nBestFile)
 }
 #endif
 
-void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_input)
-{
-
+void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_input) {
   vector<ScoreStats> entries;
 
 #if 0
@@ -89,17 +83,17 @@ void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_i
     entries = loadNBest(candFile);
   } else {
 #endif
-    entries = loadCand(candFile);
+  entries = loadCand(candFile);
 #if 0
   }
 #endif
 
   int n = entries.size();
-  if (bootstrap) {
+  if(bootstrap) {
     vector<float> scores;
-    for (int i = 0; i < bootstrap; ++i) {
+    for(int i = 0; i < bootstrap; ++i) {
       ScoreData scoredata(g_scorer);
-      for (int j = 0; j < n; ++j) {
+      for(int j = 0; j < n; ++j) {
         const int randomIndex = util::rand_excl(n);
         scoredata.add(entries[randomIndex], j);
       }
@@ -119,23 +113,27 @@ void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_i
     float lb = scores[lbIdx];
     float rb = scores[rbIdx];
 
-    if (g_has_more_files) cout << candFile << "\t";
-    if (g_has_more_scorers) cout << g_scorer->getName() << "\t";
+    if(g_has_more_files)
+      cout << candFile << "\t";
+    if(g_has_more_scorers)
+      cout << g_scorer->getName() << "\t";
 
     cout.setf(ios::fixed, ios::floatfield);
     cout.precision(4);
     cout << avg << "\t[" << lb << "," << rb << "]" << endl;
   } else {
     ScoreData scoredata(g_scorer);
-    for (int sid = 0; sid < n; ++sid) {
+    for(int sid = 0; sid < n; ++sid) {
       scoredata.add(entries[sid], sid);
     }
     g_scorer->setScoreData(&scoredata);
     candidates_t candidates(n, 0);
     float score = g_scorer->score(candidates);
 
-    if (g_has_more_files) cout << candFile << "\t";
-    if (g_has_more_scorers) cout << g_scorer->getName() << "\t";
+    if(g_has_more_files)
+      cout << candFile << "\t";
+    if(g_has_more_scorers)
+      cout << g_scorer->getName() << "\t";
 
     cout.setf(ios::fixed, ios::floatfield);
     cout.precision(4);
@@ -143,25 +141,24 @@ void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_i
   }
 }
 
-string EvaluatorUtil::int2string(int n)
-{
+string EvaluatorUtil::int2string(int n) {
   stringstream ss;
   ss << n;
   return ss.str();
 }
 
-float EvaluatorUtil::average(const vector<float>& list)
-{
+float EvaluatorUtil::average(const vector<float>& list) {
   float sum = 0;
-  for (vector<float>::const_iterator it = list.begin(); it != list.end(); ++it)
+  for(vector<float>::const_iterator it = list.begin(); it != list.end(); ++it)
     sum += *it;
 
   return sum / list.size();
 }
 
-void usage()
-{
-  cerr << "usage: evaluator [options] --reference ref1[,ref2[,ref3...]] --candidate cand1[,cand2[,cand3...]] " << endl;
+void usage() {
+  cerr << "usage: evaluator [options] --reference ref1[,ref2[,ref3...]] --candidate "
+          "cand1[,cand2[,cand3...]] "
+       << endl;
   cerr << "[--sctype|-s] the scorer type (default BLEU)" << endl;
   cerr << "[--scconfig|-c] configuration string passed to scorer" << endl;
   cerr << "\tThis is of the form NAME1:VAL1,NAME2:VAL2 etc " << endl;
@@ -194,19 +191,17 @@ void usage()
   exit(1);
 }
 
-static struct option long_options[] = {
-  {"sctype", required_argument, 0, 's'},
-  {"scconfig", required_argument, 0, 'c'},
-  {"reference", required_argument, 0, 'R'},
-  {"candidate", required_argument, 0, 'C'},
-  {"nbest", required_argument, 0, 'n'},
-  {"bootstrap", required_argument, 0, 'b'},
-  {"rseed", required_argument, 0, 'r'},
-  {"factors", required_argument, 0, 'f'},
-  {"filter", required_argument, 0, 'l'},
-  {"help", no_argument, 0, 'h'},
-  {0, 0, 0, 0}
-};
+static struct option long_options[] = {{"sctype", required_argument, 0, 's'},
+                                       {"scconfig", required_argument, 0, 'c'},
+                                       {"reference", required_argument, 0, 'R'},
+                                       {"candidate", required_argument, 0, 'C'},
+                                       {"nbest", required_argument, 0, 'n'},
+                                       {"bootstrap", required_argument, 0, 'b'},
+                                       {"rseed", required_argument, 0, 'r'},
+                                       {"factors", required_argument, 0, 'f'},
+                                       {"filter", required_argument, 0, 'l'},
+                                       {"help", no_argument, 0, 'h'},
+                                       {0, 0, 0, 0}};
 
 // Options used in evaluator.
 struct ProgramOption {
@@ -222,63 +217,51 @@ struct ProgramOption {
   bool has_seed;
 
   ProgramOption()
-    : reference(""),
-      candidate(""),
-      nbest(""),
-      bootstrap(0),
-      seed(0),
-      has_seed(false) { }
+      : reference(""), candidate(""), nbest(""), bootstrap(0), seed(0), has_seed(false) {}
 };
 
-void ParseCommandOptions(int argc, char** argv, ProgramOption* opt)
-{
+void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
   int c;
   int option_index;
   int last_scorer_index = -1;
-  while ((c = getopt_long(argc, argv, "s:c:R:C:n:b:r:f:l:h", long_options, &option_index)) != -1) {
+  while((c = getopt_long(argc, argv, "s:c:R:C:n:b:r:f:l:h", long_options, &option_index)) != -1) {
     switch(c) {
-    case 's':
-      opt->scorer_types.push_back(string(optarg));
-      opt->scorer_configs.push_back(string(""));
-      opt->scorer_factors.push_back(string(""));
-      opt->scorer_filter.push_back(string(""));
-      last_scorer_index++;
-      break;
-    case 'c':
-      if (last_scorer_index == -1) throw runtime_error("You need to specify a scorer before its config string.");
-      opt->scorer_configs[last_scorer_index] = string(optarg);
-      break;
-    case 'R':
-      opt->reference = string(optarg);
-      break;
-    case 'C':
-      opt->candidate = string(optarg);
-      break;
-    case 'n':
-      opt->nbest = string(optarg);
-      break;
-    case 'b':
-      opt->bootstrap = atoi(optarg);
-      break;
-    case 'r':
-      opt->seed = strtol(optarg, NULL, 10);
-      opt->has_seed = true;
-      break;
-    case 'f':
-      if (last_scorer_index == -1) throw runtime_error("You need to specify a scorer before its list of factors.");
-      opt->scorer_factors[last_scorer_index] = string(optarg);
-      break;
-    case 'l':
-      if (last_scorer_index == -1) throw runtime_error("You need to specify a scorer before its filter.");
-      opt->scorer_filter[last_scorer_index] = string(optarg);
-      break;
-    default:
-      usage();
+      case 's':
+        opt->scorer_types.push_back(string(optarg));
+        opt->scorer_configs.push_back(string(""));
+        opt->scorer_factors.push_back(string(""));
+        opt->scorer_filter.push_back(string(""));
+        last_scorer_index++;
+        break;
+      case 'c':
+        if(last_scorer_index == -1)
+          throw runtime_error("You need to specify a scorer before its config string.");
+        opt->scorer_configs[last_scorer_index] = string(optarg);
+        break;
+      case 'R': opt->reference = string(optarg); break;
+      case 'C': opt->candidate = string(optarg); break;
+      case 'n': opt->nbest = string(optarg); break;
+      case 'b': opt->bootstrap = atoi(optarg); break;
+      case 'r':
+        opt->seed = strtol(optarg, NULL, 10);
+        opt->has_seed = true;
+        break;
+      case 'f':
+        if(last_scorer_index == -1)
+          throw runtime_error("You need to specify a scorer before its list of factors.");
+        opt->scorer_factors[last_scorer_index] = string(optarg);
+        break;
+      case 'l':
+        if(last_scorer_index == -1)
+          throw runtime_error("You need to specify a scorer before its filter.");
+        opt->scorer_filter[last_scorer_index] = string(optarg);
+        break;
+      default: usage();
     }
   }
 
   // Add default scorer if no scorer provided
-  if (opt->scorer_types.size() == 0) {
+  if(opt->scorer_types.size() == 0) {
     opt->scorer_types.push_back(string("BLEU"));
     opt->scorer_configs.push_back(string(""));
     opt->scorer_factors.push_back(string(""));
@@ -286,9 +269,8 @@ void ParseCommandOptions(int argc, char** argv, ProgramOption* opt)
   }
 }
 
-void InitSeed(const ProgramOption *opt)
-{
-  if (opt->has_seed) {
+void InitSeed(const ProgramOption* opt) {
+  if(opt->has_seed) {
     cerr << "Seeding random numbers with " << opt->seed << endl;
     util::rand_init(opt->seed);
   } else {
@@ -297,16 +279,15 @@ void InitSeed(const ProgramOption *opt)
   }
 }
 
-} // anonymous namespace
+}  // anonymous namespace
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
   ResetUserTime();
 
   ProgramOption option;
   ParseCommandOptions(argc, argv, &option);
 
-  if (option.bootstrap) {
+  if(option.bootstrap) {
     InitSeed(&option);
   }
 
@@ -314,22 +295,28 @@ int main(int argc, char** argv)
     vector<string> refFiles;
     vector<string> candFiles;
 
-    if (option.reference.length() == 0) throw runtime_error("You have to specify at least one reference file.");
+    if(option.reference.length() == 0)
+      throw runtime_error("You have to specify at least one reference file.");
     split(option.reference, ',', refFiles);
 
-    if (option.candidate.length() == 0 && option.nbest.length() == 0) throw runtime_error("You have to specify at least one candidate (or n-best) file.");
-    if (option.candidate.length() > 0 && option.nbest.length() > 0) throw runtime_error("You can either specify candidate files or n-best files, but not both.");
+    if(option.candidate.length() == 0 && option.nbest.length() == 0)
+      throw runtime_error("You have to specify at least one candidate (or n-best) file.");
+    if(option.candidate.length() > 0 && option.nbest.length() > 0)
+      throw runtime_error("You can either specify candidate files or n-best files, but not both.");
     bool nbest_input = option.nbest.length() > 0;
-    if (nbest_input)
+    if(nbest_input)
       split(option.nbest, ',', candFiles);
     else
       split(option.candidate, ',', candFiles);
 
-    if (candFiles.size() > 1) g_has_more_files = true;
-    if (option.scorer_types.size() > 1) g_has_more_scorers = true;
+    if(candFiles.size() > 1)
+      g_has_more_files = true;
+    if(option.scorer_types.size() > 1)
+      g_has_more_scorers = true;
 
-    for (vector<string>::const_iterator fileIt = candFiles.begin(); fileIt != candFiles.end(); ++fileIt) {
-      for (size_t i = 0; i < option.scorer_types.size(); i++) {
+    for(vector<string>::const_iterator fileIt = candFiles.begin(); fileIt != candFiles.end();
+        ++fileIt) {
+      for(size_t i = 0; i < option.scorer_types.size(); i++) {
         g_scorer = ScorerFactory::getScorer(option.scorer_types[i], option.scorer_configs[i]);
         g_scorer->setFactors(option.scorer_factors[i]);
         g_scorer->setFilter(option.scorer_filter[i]);
@@ -339,7 +326,7 @@ int main(int argc, char** argv)
       }
     }
     return EXIT_SUCCESS;
-  } catch (const exception& e) {
+  } catch(const exception& e) {
     cerr << "Exception: " << e.what() << endl;
     return EXIT_FAILURE;
   }

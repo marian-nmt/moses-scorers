@@ -21,24 +21,19 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #ifndef __TERCPPTERALIGNMENT_H__
 #define __TERCPPTERALIGNMENT_H__
 
-
-#include <vector>
 #include <cstdio>
 #include <cstring>
-#include "tools.h"
+#include <vector>
 #include "terShift.h"
-
+#include "tools.h"
 
 using namespace std;
 // using namespace TERCPPNS_HashMapSpace;
-namespace TERCPPNS_TERCpp
-{
+namespace TERCPPNS_TERCpp {
 
-class terAlignment
-{
+class terAlignment {
 private:
 public:
-
   vector<string> ref;
   vector<string> hyp;
   vector<string> aftershift;
@@ -58,13 +53,11 @@ public:
   int numSft;
   int numWsf;
 
-
   terAlignment();
   string toString();
   void scoreDetails();
 
-
-  string join ( string delim, vector<string> arr );
+  string join(string delim, vector<string> arr);
   double score();
   double scoreAv();
   string printAlignments();
@@ -73,5 +66,5 @@ public:
   void set(terAlignment* l_terAlignment);
 };
 
-}
+}  // namespace TERCPPNS_TERCpp
 #endif

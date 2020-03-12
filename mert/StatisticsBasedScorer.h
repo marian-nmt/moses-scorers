@@ -13,31 +13,24 @@
 
 #include "util/exception.hh"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 /**
  * Abstract base class for Scorers that work by adding statistics across all
  * outout sentences, then apply some formula, e.g., BLEU, PER.
  */
-class StatisticsBasedScorer : public Scorer
-{
+class StatisticsBasedScorer : public Scorer {
   friend class HopeFearDecoder;
 
 public:
   StatisticsBasedScorer(const std::string& name, const std::string& config);
   virtual ~StatisticsBasedScorer() {}
-  virtual void score(const candidates_t& candidates, const diffs_t& diffs,
+  virtual void score(const candidates_t& candidates,
+                     const diffs_t& diffs,
                      statscores_t& scores) const;
 
 protected:
-
-  enum RegularisationType {
-    NONE,
-    AVERAGE,
-    MINIMUM
-  };
+  enum RegularisationType { NONE, AVERAGE, MINIMUM };
 
   /**
    * Calculate the actual score.
@@ -51,9 +44,9 @@ protected:
 
   // regularisation
   RegularisationType m_regularization_type;
-  std::size_t  m_regularization_window;
+  std::size_t m_regularization_window;
 };
 
-} // namespace
+}  // namespace MosesTuning
 
 #endif

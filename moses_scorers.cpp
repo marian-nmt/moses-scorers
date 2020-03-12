@@ -12,7 +12,6 @@ float score(const std::string& scorerType,
             std::istream& candidate,
             const std::string& scorerConfig,
             const std::string& preproc) {
-
   std::unique_ptr<MosesTuning::Scorer> scorer(
       MosesTuning::ScorerFactory::getScorer(scorerType, scorerConfig));
   scorer->setFilter(preproc);
@@ -23,13 +22,13 @@ float score(const std::string& scorerType,
   std::vector<float> corpStats;
 
   size_t sid = 0;
-  while (getline(candidate, hyp)) {
+  while(getline(candidate, hyp)) {
     scorer->prepareStats(sid, hyp, sentStats);
 
-    if (corpStats.size() == 0) {
+    if(corpStats.size() == 0) {
       corpStats = std::vector<float>(sentStats.getArray(), sentStats.getArray() + sentStats.size());
     } else {
-      for (size_t i = 0; i < sentStats.size(); ++i) {
+      for(size_t i = 0; i < sentStats.size(); ++i) {
         corpStats[i] += sentStats.get(i);
       }
     }

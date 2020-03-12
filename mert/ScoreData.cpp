@@ -8,21 +8,17 @@
 
 #include "ScoreData.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include "FileStream.h"
 #include "Scorer.h"
 #include "Util.h"
-#include "FileStream.h"
 
 using namespace std;
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
-
-ScoreData::ScoreData(Scorer* scorer) :
-  m_scorer(scorer)
-{
+ScoreData::ScoreData(Scorer* scorer) : m_scorer(scorer) {
   m_score_type = m_scorer->getName();
   // This is not dangerous: we don't use the this pointer in SetScoreData.
   m_scorer->setScoreData(this);
@@ -30,17 +26,15 @@ ScoreData::ScoreData(Scorer* scorer) :
   // TRACE_ERR("ScoreData: m_num_scores: " << m_num_scores << std::endl);
 }
 
-void ScoreData::save(ostream* os, bool bin)
-{
-  for (scoredata_t::iterator i = m_array.begin();
-       i != m_array.end(); ++i) {
+void ScoreData::save(ostream* os, bool bin) {
+  for(scoredata_t::iterator i = m_array.begin(); i != m_array.end(); ++i) {
     i->save(os, m_score_type, bin);
   }
 }
 
-void ScoreData::save(const string &file, bool bin)
-{
-  if (file.empty()) return;
+void ScoreData::save(const string& file, bool bin) {
+  if(file.empty())
+    return;
   TRACE_ERR("saving the array into " << file << endl);
 
   // matches a stream with a file. Opens the file.
@@ -50,33 +44,30 @@ void ScoreData::save(const string &file, bool bin)
   ofs.close();
 }
 
-void ScoreData::save(bool bin)
-{
+void ScoreData::save(bool bin) {
   save(&cout, bin);
 }
 
-void ScoreData::load(istream* is)
-{
+void ScoreData::load(istream* is) {
   ScoreArray entry;
 
-  while (!is->eof()) {
-    if (!is->good()) {
+  while(!is->eof()) {
+    if(!is->good()) {
       cerr << "ERROR ScoreData::load inFile.good()" << endl;
     }
     entry.clear();
     entry.load(is);
-    if (entry.size() == 0) {
+    if(entry.size() == 0) {
       break;
     }
     add(entry);
   }
 }
 
-void ScoreData::load(const string &file)
-{
+void ScoreData::load(const string& file) {
   TRACE_ERR("loading score data from " << file << endl);
-  inputfilestream input_stream(file); // matches a stream with a file. Opens the file
-  if (!input_stream) {
+  inputfilestream input_stream(file);  // matches a stream with a file. Opens the file
+  if(!input_stream) {
     throw runtime_error("Unable to open score file: " + file);
   }
   istream* is = &input_stream;
@@ -84,10 +75,9 @@ void ScoreData::load(const string &file)
   input_stream.close();
 }
 
-void ScoreData::add(ScoreArray& e)
-{
-  if (exists(e.getIndex())) { // array at position e.getIndex() already exists
-    //enlarge array at position e.getIndex()
+void ScoreData::add(ScoreArray& e) {
+  if(exists(e.getIndex())) {  // array at position e.getIndex() already exists
+    // enlarge array at position e.getIndex()
     size_t pos = getIndex(e.getIndex());
     m_array.at(pos).merge(e);
   } else {
@@ -96,9 +86,8 @@ void ScoreData::add(ScoreArray& e)
   }
 }
 
-void ScoreData::add(const ScoreStats& e, int sent_idx)
-{
-  if (exists(sent_idx)) { // array at position e.getIndex() already exists
+void ScoreData::add(const ScoreStats& e, int sent_idx) {
+  if(exists(sent_idx)) {  // array at position e.getIndex() already exists
     // Enlarge array at position e.getIndex()
     size_t pos = getIndex(sent_idx);
     //          TRACE_ERR("Inserting in array " << sent_idx << std::endl);
@@ -113,30 +102,29 @@ void ScoreData::add(const ScoreStats& e, int sent_idx)
     size_t idx = m_array.size();
     m_array.push_back(a);
     m_index_to_array_name[idx] = sent_idx;
-    m_array_name_to_index[sent_idx]=idx;
+    m_array_name_to_index[sent_idx] = idx;
     //          TRACE_ERR("size: " << size() << " -> " << a.size() << std::endl);
   }
 }
 
-bool ScoreData::check_consistency() const
-{
-  if (m_array.size() == 0)
+bool ScoreData::check_consistency() const {
+  if(m_array.size() == 0)
     return true;
 
-  for (scoredata_t::const_iterator i = m_array.begin(); i != m_array.end(); ++i)
-    if (!i->check_consistency()) return false;
+  for(scoredata_t::const_iterator i = m_array.begin(); i != m_array.end(); ++i)
+    if(!i->check_consistency())
+      return false;
 
   return true;
 }
 
-void ScoreData::setIndex()
-{
+void ScoreData::setIndex() {
   size_t j = 0;
-  for (scoredata_t::iterator i = m_array.begin(); i != m_array.end(); ++i) {
+  for(scoredata_t::iterator i = m_array.begin(); i != m_array.end(); ++i) {
     m_index_to_array_name[j] = i->getIndex();
-    m_array_name_to_index[i->getIndex()]=j;
+    m_array_name_to_index[i->getIndex()] = j;
     j++;
   }
 }
 
-}
+}  // namespace MosesTuning

@@ -24,32 +24,30 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #ifndef __HASHMAPINFOS_H__
 #define __HASHMAPINFOS_H__
 #include <boost/functional/hash.hpp>
-#include "infosHasher.h"
-#include <vector>
-#include <string>
-#include <sstream>
 #include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include "infosHasher.h"
 
 using namespace std;
 
-namespace TERCPPNS_HashMapSpace
-{
-class hashMapInfos
-{
+namespace TERCPPNS_HashMapSpace {
+class hashMapInfos {
 private:
   vector<infosHasher> m_hasher;
 
 public:
-//     ~hashMap();
-  long hashValue ( string key );
-  int trouve ( long searchKey );
-  int trouve ( string key );
-  void addHasher ( string key, vector<int>  value );
-  void addValue ( string key, vector<int>  value );
-  infosHasher getHasher ( string key );
-  vector<int> getValue ( string key );
-//         string searchValue ( string key );
-  void setValue ( string key , vector<int>  value );
+  //     ~hashMap();
+  long hashValue(string key);
+  int trouve(long searchKey);
+  int trouve(string key);
+  void addHasher(string key, vector<int> value);
+  void addValue(string key, vector<int> value);
+  infosHasher getHasher(string key);
+  vector<int> getValue(string key);
+  //         string searchValue ( string key );
+  void setValue(string key, vector<int> value);
   void printHash();
   string toString();
   vector<infosHasher> getHashMap();
@@ -58,8 +56,6 @@ public:
   string printStringHashForLexicon();
 };
 
-
-}
-
+}  // namespace TERCPPNS_HashMapSpace
 
 #endif

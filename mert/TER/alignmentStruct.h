@@ -21,41 +21,36 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #ifndef __TERCPPALIGNMENTSTRUCT_H__
 #define __TERCPPALIGNMENTSTRUCT_H__
 
-
-#include <vector>
 #include <cstdio>
-#include <string>
 #include <sstream>
+#include <string>
+#include <vector>
 #include "tools.h"
-
 
 using namespace std;
 using namespace TERCPPNS_Tools;
 
-namespace TERCPPNS_TERCpp
-{
-class alignmentStruct
-{
+namespace TERCPPNS_TERCpp {
+class alignmentStruct {
 private:
 public:
+  // 	alignmentStruct();
+  // 	alignmentStruct (int _start, int _end, int _moveto, int _newloc);
+  // 	alignmentStruct (int _start, int _end, int _moveto, int _newloc, vector<string> _shifted);
+  // 	string toString();
+  // 	int distance() ;
+  // 	bool leftShift();
+  // 	int size();
+  // 	alignmentStruct operator=(alignmentStruct t);
+  // 	string vectorToString(vector<string> vec);
 
-// 	alignmentStruct();
-// 	alignmentStruct (int _start, int _end, int _moveto, int _newloc);
-// 	alignmentStruct (int _start, int _end, int _moveto, int _newloc, vector<string> _shifted);
-// 	string toString();
-// 	int distance() ;
-// 	bool leftShift();
-// 	int size();
-// 	alignmentStruct operator=(alignmentStruct t);
-// 	string vectorToString(vector<string> vec);
-
-//   int start;
-//   int end;
-//   int moveto;
-//   int newloc;
-  vector<string> nwords; // The words we shifted
-  vector<char> alignment ; // for pra_more output
-  vector<vecInt> aftershift; // for pra_more output
+  //   int start;
+  //   int end;
+  //   int moveto;
+  //   int newloc;
+  vector<string> nwords;      // The words we shifted
+  vector<char> alignment;     // for pra_more output
+  vector<vecInt> aftershift;  // for pra_more output
   // This is used to store the cost of a shift, so we don't have to
   // calculate it multiple times.
   double cost;
@@ -63,5 +58,5 @@ public:
   void set(alignmentStruct l_alignmentStruct);
 };
 
-}
+}  // namespace TERCPPNS_TERCpp
 #endif

@@ -6,7 +6,6 @@
  *
  */
 
-
 #ifndef _FDSTREAM_
 #define _FDSTREAM_
 
@@ -20,43 +19,36 @@
 
 #define BUFFER_SIZE (32768)
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
-class _fdstream
-{
+class _fdstream {
 protected:
-  _fdstream() :
-    _file_descriptor(), _filebuf(NULL) {
-  }
+  _fdstream() : _file_descriptor(), _filebuf(NULL) {}
 
-  _fdstream(int file_descriptor, std::ios_base::openmode openmode) :
-    _file_descriptor(-1), _openmode(openmode) {
+  _fdstream(int file_descriptor, std::ios_base::openmode openmode)
+      : _file_descriptor(-1), _openmode(openmode) {
     _filebuf = NULL;
     open(file_descriptor, openmode);
     _file_descriptor.reset(file_descriptor);
   }
 
-  std::ios_base::openmode openmode() const {
-    return _openmode;
-  }
+  std::ios_base::openmode openmode() const { return _openmode; }
 
   void open(int file_descriptor, std::ios_base::openmode openmode) {
     // TODO: How does file_descriptor relate to the one we already have?
     // Should we reset our own _file_descriptor to match it?
-    if (!_filebuf) {
+    if(!_filebuf) {
       // We create a C++ stream from a file descriptor
       // stdio_filebuf is not synced with stdio.
       // From GCC 3.4.0 on exists in addition stdio_sync_filebuf
       // You can also create the filebuf from a FILE* with
       // FILE* f = fdopen(file_descriptor, mode);
-      _filebuf = new __gnu_cxx::stdio_filebuf<char> (file_descriptor,
-          openmode);
+      _filebuf = new __gnu_cxx::stdio_filebuf<char>(file_descriptor, openmode);
     }
   }
 
   virtual ~_fdstream() {
-    if (_file_descriptor.get() != -1) {
+    if(_file_descriptor.get() != -1) {
       _file_descriptor.release();
     }
     delete _filebuf;
@@ -70,31 +62,25 @@ private:
 
 protected:
   /// For child classes only: retrieve filebuf.
-  __gnu_cxx::stdio_filebuf<char> *get_filebuf() {
-    return _filebuf;
-  }
+  __gnu_cxx::stdio_filebuf<char>* get_filebuf() { return _filebuf; }
 };
 
-class ifdstream : public _fdstream
-{
+class ifdstream : public _fdstream {
 public:
-  ifdstream() :
-    _fdstream(), _stream(NULL) {
-  }
+  ifdstream() : _fdstream(), _stream(NULL) {}
 
-  ifdstream(int file_descriptor) :
-    _fdstream(file_descriptor, std::ios_base::in) {
+  ifdstream(int file_descriptor) : _fdstream(file_descriptor, std::ios_base::in) {
     _stream = new std::istream(get_filebuf());
   }
 
   void open(int file_descriptor) {
-    if (!_stream) {
+    if(!_stream) {
       _fdstream::open(file_descriptor, std::ios_base::in);
       _stream = new std::istream(get_filebuf());
     }
   }
 
-  ifdstream& operator>> (std::string& str) {
+  ifdstream& operator>>(std::string& str) {
     (*_stream) >> str;
 
     return *this;
@@ -107,24 +93,22 @@ public:
     return ret;
   }
 
-  std::size_t getline(char* s, std::streamsize n) {
-    return (getline(s, n, '\n'));
-  }
+  std::size_t getline(char* s, std::streamsize n) { return (getline(s, n, '\n')); }
 
   std::size_t getline(char* s, std::streamsize n, char delim) {
     int i = 0;
     do {
       s[i] = _stream->get();
       i++;
-    } while(i < n-1 && s[i-1] != delim && s[i-1] != '\0');
+    } while(i < n - 1 && s[i - 1] != delim && s[i - 1] != '\0');
 
-    s[i-1] = '\0'; // overwrite the delimiter given with string end
+    s[i - 1] = '\0';  // overwrite the delimiter given with string end
 
-    return i-1;
+    return i - 1;
   }
 
   ~ifdstream() {
-    //this->~_fdstream();
+    // this->~_fdstream();
     delete _stream;
   }
 
@@ -132,28 +116,23 @@ private:
   std::istream* _stream;
 };
 
-class ofdstream : public _fdstream
-{
+class ofdstream : public _fdstream {
 public:
-  ofdstream() :
-    _fdstream(), _stream(NULL) {
-  }
+  ofdstream() : _fdstream(), _stream(NULL) {}
 
-  ofdstream(int file_descriptor) :
-    _fdstream(file_descriptor, std::ios_base::out) {
+  ofdstream(int file_descriptor) : _fdstream(file_descriptor, std::ios_base::out) {
     _stream = new std::ostream(get_filebuf());
   }
 
   void open(int file_descriptor) {
-    if (!_stream) {
+    if(!_stream) {
       _fdstream::open(file_descriptor, std::ios_base::out);
       _stream = new std::ostream(get_filebuf());
     }
   }
 
-
-  ofdstream& operator<< (const std::string& str) {
-    if (_stream->good())
+  ofdstream& operator<<(const std::string& str) {
+    if(_stream->good())
       (*_stream) << str;
 
     _stream->flush();
@@ -161,7 +140,7 @@ public:
   }
 
   ~ofdstream() {
-    //this->~_fdstream();
+    // this->~_fdstream();
     delete _stream;
   }
 
@@ -173,6 +152,6 @@ private:
 #error "Not supported"
 #endif
 
-}
+}  // namespace MosesTuning
 
-#endif // _FDSTREAM_
+#endif  // _FDSTREAM_

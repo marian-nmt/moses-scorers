@@ -1,8 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 /**
  * @brief Score candidate sentences with a chosen Moses scorer.

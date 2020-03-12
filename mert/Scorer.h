@@ -1,28 +1,26 @@
 #pragma once
 
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <limits>
-#include "Types.h"
 #include "ScoreData.h"
+#include "Types.h"
 
-namespace mert
-{
+namespace mert {
 
 class Vocabulary;
 
-} // namespace mert
+}  // namespace mert
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
 class PreProcessFilter;
 class ScoreStats;
 
-enum ScorerRegularisationStrategy {REG_NONE, REG_AVERAGE, REG_MINIMUM};
+enum ScorerRegularisationStrategy { REG_NONE, REG_AVERAGE, REG_MINIMUM };
 
 /**
  * Superclass of all scorers and dummy implementation.
@@ -30,8 +28,7 @@ enum ScorerRegularisationStrategy {REG_NONE, REG_AVERAGE, REG_MINIMUM};
  * In order to add a new scorer it should be sufficient to override the members
  * prepareStats(), setReferenceFiles() and score() (or calculateScore()).
  */
-class Scorer
-{
+class Scorer {
 public:
   Scorer(const std::string& name, const std::string& config);
   virtual ~Scorer();
@@ -46,10 +43,11 @@ public:
    */
   virtual float calculateScore(const std::vector<ScoreStatsType>& totals) const = 0;
 
-  float calculateSentenceLevelBackgroundScore(const std::vector<ScoreStatsType>& totals, const std::vector<ScoreStatsType>& bg) {
+  float calculateSentenceLevelBackgroundScore(const std::vector<ScoreStatsType>& totals,
+                                              const std::vector<ScoreStatsType>& bg) {
     std::vector<ScoreStatsType> stats(totals.size());
-    for(size_t i=0; i<stats.size(); i++)
-      stats[i] = totals[i]+bg[i];
+    for(size_t i = 0; i < stats.size(); i++)
+      stats[i] = totals[i] + bg[i];
     // Get score and scale by reference length (as per Chiang et al 08)
     return calculateScore(stats) * getReferenceLength(stats);
   }
@@ -77,7 +75,8 @@ public:
    * Score using each of the candidate index, then go through the diffs
    * applying each in turn, and calculating a new score each time.
    */
-  virtual void score(const candidates_t& candidates, const diffs_t& diffs,
+  virtual void score(const candidates_t& candidates,
+                     const diffs_t& diffs,
                      statscores_t& scores) const = 0;
   /*
   {
@@ -98,12 +97,10 @@ public:
    */
   float score(const candidates_t& candidates) const;
 
-  const std::string& getName() const {
-    return m_name;
-  }
+  const std::string& getName() const { return m_name; }
 
   std::size_t getReferenceSize() const {
-    if (m_score_data) {
+    if(m_score_data) {
       return m_score_data->size();
     }
     return 0;
@@ -117,16 +114,14 @@ public:
   /**
    * Set the score data, prior to scoring.
    */
-  virtual void setScoreData(ScoreData* data) {
-    m_score_data = data;
-  }
+  virtual void setScoreData(ScoreData* data) { m_score_data = data; }
 
   /**
    * The scorer returns if it uses the reference alignment data
    * for permutation distance scores
    **/
   virtual bool useAlignment() const {
-    //cout << "Scorer::useAlignment returning false " << endl;
+    // cout << "Scorer::useAlignment returning false " << endl;
     return false;
   };
 
@@ -135,9 +130,7 @@ public:
    */
   virtual void setFactors(const std::string& factors);
 
-  mert::Vocabulary* GetVocab() const {
-    return m_vocab;
-  }
+  mert::Vocabulary* GetVocab() const { return m_vocab; }
 
   /**
    * Set unix filter, which will be used to preprocess the sentences
@@ -173,9 +166,9 @@ protected:
   /**
    * Get value of config variable. If not provided, return default.
    */
-  std::string getConfig(const std::string& key, const std::string& def="") const {
-    std::map<std::string,std::string>::const_iterator i = m_config.find(key);
-    if (i == m_config.end()) {
+  std::string getConfig(const std::string& key, const std::string& def = "") const {
+    std::map<std::string, std::string>::const_iterator i = m_config.find(key);
+    if(i == m_config.end()) {
       return def;
     } else {
       return i->second;
@@ -199,39 +192,34 @@ protected:
   std::string preprocessSentence(const std::string& sentence) const {
     return applyFactors(applyFilter(sentence));
   }
-
 };
 
-namespace
-{
+namespace {
 
-//regularisation strategies
-inline float score_min(const statscores_t& scores, size_t start, size_t end)
-{
+// regularisation strategies
+inline float score_min(const statscores_t& scores, size_t start, size_t end) {
   float min = std::numeric_limits<float>::max();
-  for (size_t i = start; i < end; ++i) {
-    if (scores[i] < min) {
+  for(size_t i = start; i < end; ++i) {
+    if(scores[i] < min) {
       min = scores[i];
     }
   }
   return min;
 }
 
-inline float score_average(const statscores_t& scores, size_t start, size_t end)
-{
-  if ((end - start) < 1) {
+inline float score_average(const statscores_t& scores, size_t start, size_t end) {
+  if((end - start) < 1) {
     // this shouldn't happen
     return 0;
   }
   float total = 0;
-  for (size_t j = start; j < end; ++j) {
+  for(size_t j = start; j < end; ++j) {
     total += scores[j];
   }
 
   return total / (end - start);
 }
 
-} // namespace
+}  // namespace
 
-}
-
+}  // namespace MosesTuning

@@ -5,20 +5,17 @@
 #include <string>
 #include <vector>
 
-#include "Types.h"
 #include "StatisticsBasedScorer.h"
+#include "Types.h"
 
-namespace MosesTuning
-{
-
+namespace MosesTuning {
 
 class ScoreStats;
 
 /**
  * TER scoring
  */
-class TerScorer: public StatisticsBasedScorer
-{
+class TerScorer : public StatisticsBasedScorer {
 public:
   explicit TerScorer(const std::string& config = "");
   ~TerScorer();
@@ -51,6 +48,6 @@ private:
   TerScorer& operator=(const TerScorer&);
 };
 
-}
+}  // namespace MosesTuning
 
-#endif // MERT_TER_SCORER_H_
+#endif  // MERT_TER_SCORER_H_

@@ -21,20 +21,17 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #ifndef __TERCPPTOOLS_H__
 #define __TERCPPTOOLS_H__
 
-
-#include <vector>
-#include <iostream>
+#include <boost/xpressive/xpressive.hpp>
 #include <cstdio>
 #include <cstdlib>
-#include <string>
+#include <iostream>
 #include <sstream>
-#include <boost/xpressive/xpressive.hpp>
-
+#include <string>
+#include <vector>
 
 using namespace std;
 
-namespace TERCPPNS_Tools
-{
+namespace TERCPPNS_Tools {
 typedef vector<double> vecDouble;
 typedef vector<char> vecChar;
 typedef vector<int> vecInt;
@@ -44,11 +41,10 @@ typedef vector<string> vecString;
 typedef vector<string> alignmentElement;
 typedef vector<alignmentElement> WERalignment;
 
-
 struct param {
   bool debugMode;
-  string referenceFile;     // path to the resources
-  string hypothesisFile;     // path to the configuration files
+  string referenceFile;   // path to the resources
+  string hypothesisFile;  // path to the configuration files
   string outputFileExtension;
   string outputFileName;
   bool noPunct;
@@ -69,38 +65,38 @@ struct param {
 // private:
 // public:
 
-string vectorToString ( vector<string> vec );
-string vectorToString ( vector<char> vec );
-string vectorToString ( vector<int> vec );
-string vectorToString ( vector<string> vec, string s );
-string vectorToString ( vector<char> vec, string s );
-string vectorToString ( vector<int> vec, string s );
-string vectorToString ( vector<bool> vec, string s );
-string vectorToString ( char* vec, string s, int taille );
-string vectorToString ( int* vec, string s , int taille );
-string vectorToString ( bool* vec, string s , int taille );
-string vectorToString ( vector<char>* vec, string s, int taille );
-string vectorToString ( vector<int>* vec, string s , int taille );
-string vectorToString ( vector<bool>* vec, string s , int taille );
-vector<string> subVector ( vector<string> vec, int start, int end );
-vector<int> subVector ( vector<int> vec, int start, int end );
-vector<float> subVector ( vector<float> vec, int start, int end );
-vector<string> copyVector ( vector<string> vec );
-vector<int> copyVector ( vector<int> vec );
-vector<float> copyVector ( vector<float> vec );
-vector<string> stringToVector ( string s, string tok );
-vector<string> stringToVector ( char s, string tok );
-vector<string> stringToVector ( int s, string tok );
-vector<int> stringToVectorInt ( string s, string tok );
-vector<float> stringToVectorFloat ( string s, string tok );
+string vectorToString(vector<string> vec);
+string vectorToString(vector<char> vec);
+string vectorToString(vector<int> vec);
+string vectorToString(vector<string> vec, string s);
+string vectorToString(vector<char> vec, string s);
+string vectorToString(vector<int> vec, string s);
+string vectorToString(vector<bool> vec, string s);
+string vectorToString(char* vec, string s, int taille);
+string vectorToString(int* vec, string s, int taille);
+string vectorToString(bool* vec, string s, int taille);
+string vectorToString(vector<char>* vec, string s, int taille);
+string vectorToString(vector<int>* vec, string s, int taille);
+string vectorToString(vector<bool>* vec, string s, int taille);
+vector<string> subVector(vector<string> vec, int start, int end);
+vector<int> subVector(vector<int> vec, int start, int end);
+vector<float> subVector(vector<float> vec, int start, int end);
+vector<string> copyVector(vector<string> vec);
+vector<int> copyVector(vector<int> vec);
+vector<float> copyVector(vector<float> vec);
+vector<string> stringToVector(string s, string tok);
+vector<string> stringToVector(char s, string tok);
+vector<string> stringToVector(int s, string tok);
+vector<int> stringToVectorInt(string s, string tok);
+vector<float> stringToVectorFloat(string s, string tok);
 string lowerCase(string str);
 string removePunct(string str);
 string tokenizePunct(string str);
 string removePunctTercom(string str);
 string normalizeStd(string str);
 string printParams(param p);
-string join ( string delim, vector<string> arr );
+string join(string delim, vector<string> arr);
 // };
 param copyParam(param p);
-}
+}  // namespace TERCPPNS_Tools
 #endif
