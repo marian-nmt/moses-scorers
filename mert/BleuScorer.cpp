@@ -146,9 +146,9 @@ void BleuScorer::ProcessReferenceLine(const std::string& line, Reference* ref) c
 }
 
 bool BleuScorer::GetNextReferenceFromStreams(
-    std::vector<boost::shared_ptr<std::ifstream> >& referenceStreams,
+    std::vector<std::shared_ptr<std::ifstream> >& referenceStreams,
     Reference& ref) const {
-  for(vector<boost::shared_ptr<ifstream> >::iterator ifs = referenceStreams.begin();
+  for(vector<std::shared_ptr<ifstream> >::iterator ifs = referenceStreams.begin();
       ifs != referenceStreams.end();
       ++ifs) {
     if(!(*ifs))

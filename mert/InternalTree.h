@@ -1,7 +1,6 @@
 #pragma once
 
-#include <boost/make_shared.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <iostream>
 #include <map>
 #include <string>
@@ -12,7 +11,7 @@
 namespace MosesTuning {
 
 class InternalTree;
-typedef boost::shared_ptr<InternalTree> TreePointer;
+typedef std::shared_ptr<InternalTree> TreePointer;
 typedef int NTLabel;
 
 class InternalTree {
@@ -24,9 +23,8 @@ public:
   InternalTree(const std::string& line, const bool terminal = false);
   InternalTree(const InternalTree& tree) : m_value(tree.m_value), m_isTerminal(tree.m_isTerminal) {
     const std::vector<TreePointer>& children = tree.m_children;
-    for(std::vector<TreePointer>::const_iterator it = children.begin(); it != children.end();
-        it++) {
-      m_children.push_back(boost::make_shared<InternalTree>(**it));
+    for(std::vector<TreePointer>::const_iterator it = children.begin(); it != children.end(); it++) {
+      m_children.emplace_back(new InternalTree(**it));
     }
   }
   size_t AddSubTree(const std::string& line, size_t start);

@@ -35,7 +35,7 @@ void HwcmScorer::setReferenceFiles(const vector<string>& referenceFiles) {
   string line;
   while(getline(in, line)) {
     line = this->preprocessSentence(line);
-    TreePointer tree(boost::make_shared<InternalTree>(line));
+    TreePointer tree(std::make_shared<InternalTree>(line));
     m_ref_trees.push_back(tree);
     vector<map<string, int> > hwc(kHwcmOrder);
     vector<string> history(kHwcmOrder);
@@ -121,7 +121,7 @@ void HwcmScorer::prepareStats(size_t sid, const string& text, ScoreStats& entry)
     sentence = it->as_string();
   }
 
-  TreePointer tree(boost::make_shared<InternalTree>(sentence));
+  TreePointer tree(new InternalTree(sentence));
   vector<map<string, int> > hwc_test(kHwcmOrder);
   vector<string> history(kHwcmOrder);
   extractHeadWordChain(tree, history, hwc_test);

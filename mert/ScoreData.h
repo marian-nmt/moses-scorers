@@ -9,7 +9,6 @@
 #ifndef MERT_SCORE_DATA_H_
 #define MERT_SCORE_DATA_H_
 
-#include <boost/lexical_cast.hpp>
 #include <iosfwd>
 #include <stdexcept>
 #include <string>
@@ -87,7 +86,7 @@ public:
     idx2name::const_iterator i = m_index_to_array_name.find(idx);
     if(i != m_index_to_array_name.end())
       throw std::runtime_error("there is no entry at index "
-                               + boost::lexical_cast<std::string>(idx));
+                               + std::to_string(idx));
     return i->second;
   }
 };

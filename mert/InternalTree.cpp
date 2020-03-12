@@ -28,7 +28,7 @@ size_t InternalTree::AddSubTree(const std::string &line, size_t pos) {
 
     if(token == '[') {
       if(m_value.size() > 0) {
-        m_children.push_back(boost::make_shared<InternalTree>(value, false));
+        m_children.emplace_back(new InternalTree(value, false));
         pos = m_children.back()->AddSubTree(line, pos + 1);
       } else {
         if(value.size() > 0) {
@@ -41,7 +41,7 @@ size_t InternalTree::AddSubTree(const std::string &line, size_t pos) {
         m_value = value;
       } else if(value.size() > 0) {
         m_isTerminal = false;
-        m_children.push_back(boost::make_shared<InternalTree>(value, true));
+        m_children.emplace_back(new InternalTree(value, true));
       }
       if(token == ' ') {
         pos++;

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Ngram.h"
 #include "Reference.h"
@@ -61,7 +61,7 @@ public:
 
   void ProcessReferenceLine(const std::string& line, Reference* ref) const;
 
-  bool GetNextReferenceFromStreams(std::vector<boost::shared_ptr<std::ifstream> >& referenceStreams,
+  bool GetNextReferenceFromStreams(std::vector<std::shared_ptr<std::ifstream> >& referenceStreams,
                                    Reference& ref) const;
 
   // private:

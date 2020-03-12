@@ -4,9 +4,25 @@
 #include <string>
 #include <vector>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace MosesTuning {
+
+template <class T>
+inline void hash_combine(std::size_t& seed, const T& v) {
+  std::hash<T> hasher;
+  seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+}
+
+template <typename Container> // we can make this generic for any container [1]
+struct ContainerHash {
+    std::size_t operator()(Container const& c) const {
+      std::size_t hash = 0;
+      for(auto& v : c)
+        hash_combine(hash, v);
+      return hash;
+    }
+};
 
 /** A simple STL-std::map based n-gram counts. Basically, we provide
  * typical accessors and mutaors, but we intentionally does not allow
@@ -35,8 +51,8 @@ public:
 
   typedef std::vector<int> Key;
   typedef int Value;
-  typedef boost::unordered_map<Key, Value>::iterator iterator;
-  typedef boost::unordered_map<Key, Value>::const_iterator const_iterator;
+  typedef std::unordered_map<Key, Value, ContainerHash<Key>>::iterator iterator;
+  typedef std::unordered_map<Key, Value, ContainerHash<Key>>::const_iterator const_iterator;
 
   NgramCounts() : kDefaultCount(1) {}
   virtual ~NgramCounts() {}
@@ -94,7 +110,7 @@ public:
 
 private:
   const int kDefaultCount;
-  boost::unordered_map<Key, Value> m_counts;
+  std::unordered_map<Key, Value, ContainerHash<Key>> m_counts;
 };
 
 }  // namespace MosesTuning

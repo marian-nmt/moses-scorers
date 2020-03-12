@@ -10,7 +10,9 @@
 #include <string>
 #include <vector>
 
-#include <boost/thread/mutex.hpp>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #if defined(__GLIBCXX__) || defined(__GLIBCPP__)
 #include "Fdstream.h"

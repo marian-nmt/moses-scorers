@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
-
 #include "Ngram.h"
 #include "Reference.h"
 #include "ScopedVector.h"
