@@ -7,7 +7,5 @@ Compilation without unit testing:
 
     mkdir build
     cd build
-    cmake -DENABLE_TESTS=OFF ..
+    cmake ..
     make -j
-
-An example usage can be found in `example` directory.
