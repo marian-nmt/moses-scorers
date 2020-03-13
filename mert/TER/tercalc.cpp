@@ -92,6 +92,7 @@ terAlignment terCalc::TER(vector<int>& hyp, vector<int>& ref) {
   }
   stringHyp = s.str();
   s.str("");
+
   vector<string> l_vref = stringToVector(stringRef, " ");
   vector<string> l_vhyp = stringToVector(stringHyp, " ");
   return TER(l_vhyp, l_vref);

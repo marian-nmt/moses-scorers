@@ -8,8 +8,8 @@
 
 #include "SentenceLevelScorer.h"
 
-#include <boost/spirit/home/support/detail/lexer/runtime_error.hpp>
 #include <iostream>
+#include <util/exception.hh>
 
 using namespace std;
 
@@ -41,7 +41,7 @@ void SentenceLevelScorer::Init() {
   } else if(type == TYPE_MINIMUM) {
     m_regularisationStrategy = REG_MINIMUM;
   } else {
-    throw boost::lexer::runtime_error("Unknown scorer regularisation strategy: " + type);
+    UTIL_THROW2("Unknown scorer regularisation strategy: " + type);
   }
   cerr << "Using scorer regularisation strategy: " << type << endl;
 

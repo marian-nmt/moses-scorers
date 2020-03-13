@@ -17,7 +17,7 @@ class Exception : public std::exception {
     Exception() throw();
     virtual ~Exception() throw();
 
-    const char *what() const throw() { return what_.c_str(); }
+    const char *what() const throw() override { return what_.c_str(); }
 
     // For use by the UTIL_THROW macros.
     void SetLocation(

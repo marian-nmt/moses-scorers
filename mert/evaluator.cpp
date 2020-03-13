@@ -15,7 +15,6 @@
 #include "ScorerFactory.h"
 #include "Timer.h"
 #include "Util.h"
-// #include "Data.h"
 #include "util/random.hh"
 
 using namespace std;
@@ -59,34 +58,8 @@ vector<ScoreStats> EvaluatorUtil::loadCand(const string& candFile) {
   return entries;
 }
 
-#if 0
-// load 1-best hypothesis from n-best file (useful if relying on alignment/tree information)
-vector<ScoreStats> EvaluatorUtil::loadNBest(const string& nBestFile)
-{
-  vector<ScoreStats> entries;
-
-  Data data(g_scorer);
-  data.loadNBest(nBestFile, true);
-  const ScoreDataHandle & score_data = data.getScoreData();
-  for (size_t i = 0; i != score_data->size(); i++) {
-    entries.push_back(score_data->get(i, 0));
-  }
-  return entries;
-}
-#endif
-
-void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_input) {
-  vector<ScoreStats> entries;
-
-#if 0
-  if (nbest_input) {
-    entries = loadNBest(candFile);
-  } else {
-#endif
-  entries = loadCand(candFile);
-#if 0
-  }
-#endif
+void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool sentenceLevel) {
+  vector<ScoreStats> entries = loadCand(candFile);
 
   int n = entries.size();
   if(bootstrap) {
@@ -122,22 +95,25 @@ void EvaluatorUtil::evaluate(const string& candFile, int bootstrap, bool nbest_i
     cout.precision(4);
     cout << avg << "\t[" << lb << "," << rb << "]" << endl;
   } else {
-    ScoreData scoredata(g_scorer);
-    for(int sid = 0; sid < n; ++sid) {
-      scoredata.add(entries[sid], sid);
+    size_t batchSize = sentenceLevel ? 1 : n;
+    for(int bid = 0; bid < n; bid += batchSize) {
+      ScoreData scoredata(g_scorer);
+      for(int sid = bid; sid < bid + batchSize; ++sid) {
+        scoredata.add(entries[sid], sid - bid);
+      }
+      g_scorer->setScoreData(&scoredata);
+      candidates_t candidates(batchSize, 0);
+      float score = g_scorer->score(candidates);
+
+      if(g_has_more_files)
+        cout << candFile << "\t";
+      if(g_has_more_scorers)
+        cout << g_scorer->getName() << "\t";
+
+      cout.setf(ios::fixed, ios::floatfield);
+      cout.precision(4);
+      cout << score << endl;
     }
-    g_scorer->setScoreData(&scoredata);
-    candidates_t candidates(n, 0);
-    float score = g_scorer->score(candidates);
-
-    if(g_has_more_files)
-      cout << candFile << "\t";
-    if(g_has_more_scorers)
-      cout << g_scorer->getName() << "\t";
-
-    cout.setf(ios::fixed, ios::floatfield);
-    cout.precision(4);
-    cout << score << endl;
   }
 }
 
@@ -164,7 +140,7 @@ void usage() {
   cerr << "\tThis is of the form NAME1:VAL1,NAME2:VAL2 etc " << endl;
   cerr << "[--reference|-R] comma separated list of reference files" << endl;
   cerr << "[--candidate|-C] comma separated list of candidate files" << endl;
-  cerr << "[--nbest|-n] comma separated list of nbest files (only 1-best is evaluated)" << endl;
+  cerr << "[--sentence-level|-S] line by line scores" << endl;
   cerr << "[--factors|-f] list of factors passed to the scorer (e.g. 0|2)" << endl;
   cerr << "[--filter|-l] filter command which will be used to preprocess the sentences" << endl;
   cerr << "[--bootstrap|-b] number of bootstrapped samples (default 0 - no bootstrapping)" << endl;
@@ -195,7 +171,7 @@ static struct option long_options[] = {{"sctype", required_argument, 0, 's'},
                                        {"scconfig", required_argument, 0, 'c'},
                                        {"reference", required_argument, 0, 'R'},
                                        {"candidate", required_argument, 0, 'C'},
-                                       {"nbest", required_argument, 0, 'n'},
+                                       {"sentence", no_argument, 0, 'x'},
                                        {"bootstrap", required_argument, 0, 'b'},
                                        {"rseed", required_argument, 0, 'r'},
                                        {"factors", required_argument, 0, 'f'},
@@ -209,7 +185,7 @@ struct ProgramOption {
   vector<string> scorer_configs;
   string reference;
   string candidate;
-  string nbest;
+  bool sentenceLevel;
   vector<string> scorer_factors;
   vector<string> scorer_filter;
   int bootstrap;
@@ -217,14 +193,14 @@ struct ProgramOption {
   bool has_seed;
 
   ProgramOption()
-      : reference(""), candidate(""), nbest(""), bootstrap(0), seed(0), has_seed(false) {}
+      : reference(""), candidate(""), sentenceLevel(false), bootstrap(0), seed(0), has_seed(false) {}
 };
 
 void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
   int c;
   int option_index;
   int last_scorer_index = -1;
-  while((c = getopt_long(argc, argv, "s:c:R:C:n:b:r:f:l:h", long_options, &option_index)) != -1) {
+  while((c = getopt_long(argc, argv, "s:c:R:C:x:b:r:f:l:h", long_options, &option_index)) != -1) {
     switch(c) {
       case 's':
         opt->scorer_types.push_back(string(optarg));
@@ -240,7 +216,7 @@ void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
         break;
       case 'R': opt->reference = string(optarg); break;
       case 'C': opt->candidate = string(optarg); break;
-      case 'n': opt->nbest = string(optarg); break;
+      case 'x': opt->sentenceLevel = true; break;
       case 'b': opt->bootstrap = atoi(optarg); break;
       case 'r':
         opt->seed = strtol(optarg, NULL, 10);
@@ -299,15 +275,9 @@ int main(int argc, char** argv) {
       throw runtime_error("You have to specify at least one reference file.");
     split(option.reference, ',', refFiles);
 
-    if(option.candidate.length() == 0 && option.nbest.length() == 0)
-      throw runtime_error("You have to specify at least one candidate (or n-best) file.");
-    if(option.candidate.length() > 0 && option.nbest.length() > 0)
-      throw runtime_error("You can either specify candidate files or n-best files, but not both.");
-    bool nbest_input = option.nbest.length() > 0;
-    if(nbest_input)
-      split(option.nbest, ',', candFiles);
-    else
-      split(option.candidate, ',', candFiles);
+    if(option.candidate.length() == 0)
+      throw runtime_error("You have to specify at least one candidate file.");
+    split(option.candidate, ',', candFiles);
 
     if(candFiles.size() > 1)
       g_has_more_files = true;
@@ -321,7 +291,7 @@ int main(int argc, char** argv) {
         g_scorer->setFactors(option.scorer_factors[i]);
         g_scorer->setFilter(option.scorer_filter[i]);
         g_scorer->setReferenceFiles(refFiles);
-        EvaluatorUtil::evaluate(*fileIt, option.bootstrap, nbest_input);
+        EvaluatorUtil::evaluate(*fileIt, option.bootstrap, option.sentenceLevel);
         delete g_scorer;
       }
     }
