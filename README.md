@@ -1,7 +1,7 @@
 moses-scorers
 =============
 
-Scorers from Moses as a separate library.
+Scorers from Moses (https://github.com/moses-smt/moses-decoder) as a separate library.
 
 Compilation without unit testing:
 
