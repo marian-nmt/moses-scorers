@@ -133,26 +133,20 @@ static std::string tokenize(const std::string& text) {
 static inline std::string alignment2tags(const TER::terAlignment& aln, bool hasGaps) {
   std::stringstream tags;
   bool first = true;
-  size_t hypPos = 0;
-  size_t alnPos = 0;
+  bool lastDel = false;
   for(auto action : aln.alignment) {
     std::string delim = first ? "" : " ";
+    std::string gap = hasGaps ? (lastDel ? "BAD " : "OK ") : "";
     switch (action) {
-      case 'A':
-        if(hasGaps && alnPos > 0 && aln.hyp[hypPos] == "<GAP>" && aln.alignment[alnPos - 1] == 'D')
-          tags << delim << "BAD";
-        else
-          tags << delim << "OK";  
-        first = false;
-        hypPos++;
-        break;
-      case 'S': tags << delim << "BAD"; first = false; hypPos++; break;
-      case 'I': tags << delim << "BAD"; first = false; hypPos++; break;
-      case 'D': break; // do nothing
+      case 'A': tags << delim << gap << "OK";  first = false; lastDel = false; break;
+      case 'S': tags << delim << gap << "BAD"; first = false; lastDel = false; break;
+      case 'I': tags << delim << gap << "BAD"; first = false; lastDel = false; break;
+      case 'D': lastDel = true; break; // do nothing
       default: break;
     }
-    alnPos++;
   }
+  if(hasGaps)
+    tags << " " << (lastDel ? "BAD" : "OK");
   return tags.str();
 }
 
@@ -187,21 +181,6 @@ int main(int argc, char** argv) {
       
       if(ref.empty())
         throw std::runtime_error("Reference is empty");
-
-      if(option.gaps) {
-        auto gapMe = [](decltype(hyp)& tokens) {
-          decltype(hyp) tokensGap;
-          tokensGap.push_back("<GAP>");
-          for(auto t: tokens) {
-            tokensGap.push_back(t);
-            tokensGap.push_back("<GAP>");
-          }
-          tokens.swap(tokensGap);
-        };
-
-        gapMe(hyp);
-        gapMe(ref);
-      }
 
       TER::terAlignment result = ter.TER(hyp, ref);
 
