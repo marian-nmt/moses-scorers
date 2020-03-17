@@ -21,6 +21,7 @@ void usage() {
   cerr << "[--print|-p] print (tokenized) inputs" << endl;
   cerr << "[--alignment|-a] print full alignment" << endl;
   cerr << "[--wmt|-w] output OK/BAD tags a la WMT QE task (1-to-1 with cand tokens)" << endl;
+  cerr << "[--gaps|-g] add WMT18-style gap tokens" << endl;
   cerr << "[--beam-width|-b] beam width, optional, default is 20" << endl;
   cerr << "[--max-shift-distance|-d] maximum shift distance, optional, default is 50 tokens" << endl;
   cerr << "[--match-cost|-M] cost for matching, default is 0" << endl;
@@ -43,6 +44,7 @@ static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"print", no_argument, 0, 'p'},
                                        {"alignment", no_argument, 0, 'a'},
                                        {"wmt", no_argument, 0, 'w'},
+                                       {"gaps", no_argument, 0, 'g'},
                                        {"beam-width", required_argument, 0, 'b'},
                                        {"max-shift-distance", required_argument, 0, 'd'},
                                        {"match-cost", required_argument, 0, 'M'},
@@ -61,6 +63,7 @@ struct ProgramOption {
   bool clampScore{false};
   bool tokenize{false};
   bool print{false};
+  bool gaps{false};
 
   int beamWidth{20};
   int maxShiftDistance{50};
@@ -76,10 +79,11 @@ struct ProgramOption {
 void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
   int c;
   int option_index;
-  while((c = getopt_long(argc, argv, "awicthpb:d:M:D:B:I:T:", long_options, &option_index)) != -1) {
+  while((c = getopt_long(argc, argv, "awgicthpb:d:M:D:B:I:T:", long_options, &option_index)) != -1) {
     switch(c) {
       case 'a': opt->printAlignment = true; break;
       case 'w': opt->printAlignmentWMT = true; break;
+      case 'g': opt->gaps = true; break;
       case 'i': opt->negateScore = true; break;
       case 'c': opt->clampScore = true; break;
       case 't': opt->tokenize = true; break;
@@ -126,18 +130,28 @@ static std::string tokenize(const std::string& text) {
   return normText;
 }
 
-static inline std::string alignment2tags(const TER::terAlignment& aln) {
+static inline std::string alignment2tags(const TER::terAlignment& aln, bool hasGaps) {
   std::stringstream tags;
   bool first = true;
+  size_t hypPos = 0;
+  size_t alnPos = 0;
   for(auto action : aln.alignment) {
     std::string delim = first ? "" : " ";
     switch (action) {
-      case 'A': tags << delim << "OK";  first = false; break;
-      case 'S': tags << delim << "BAD"; first = false; break;
-      case 'I': tags << delim << "BAD"; first = false; break;
+      case 'A':
+        if(hasGaps && alnPos > 0 && aln.hyp[hypPos] == "<GAP>" && aln.alignment[alnPos - 1] == 'D')
+          tags << delim << "BAD";
+        else
+          tags << delim << "OK";  
+        first = false;
+        hypPos++;
+        break;
+      case 'S': tags << delim << "BAD"; first = false; hypPos++; break;
+      case 'I': tags << delim << "BAD"; first = false; hypPos++; break;
       case 'D': break; // do nothing
       default: break;
     }
+    alnPos++;
   }
   return tags.str();
 }
@@ -174,6 +188,21 @@ int main(int argc, char** argv) {
       if(ref.empty())
         throw std::runtime_error("Reference is empty");
 
+      if(option.gaps) {
+        auto gapMe = [](decltype(hyp)& tokens) {
+          decltype(hyp) tokensGap;
+          tokensGap.push_back("<GAP>");
+          for(auto t: tokens) {
+            tokensGap.push_back(t);
+            tokensGap.push_back("<GAP>");
+          }
+          tokens.swap(tokensGap);
+        };
+
+        gapMe(hyp);
+        gapMe(ref);
+      }
+
       TER::terAlignment result = ter.TER(hyp, ref);
 
       double score = result.score();
@@ -187,7 +216,7 @@ int main(int argc, char** argv) {
       
       if(option.printAlignment || option.printAlignmentWMT) {
         if(option.printAlignmentWMT)
-          std::cout << "\t" << alignment2tags(result);
+          std::cout << "\t" << alignment2tags(result, option.gaps);
         else
           std::cout << "\t" << result.printAlignments();
       }
