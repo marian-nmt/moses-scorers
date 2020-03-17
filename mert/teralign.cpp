@@ -21,6 +21,7 @@ void usage() {
   cerr << "[--print|-p] print (tokenized) inputs" << endl;
   cerr << "[--alignment|-a] print full alignment" << endl;
   cerr << "[--wmt|-w] output OK/BAD tags a la WMT QE task (1-to-1 with cand tokens)" << endl;
+  cerr << "[--beam-width|-b] beam width, optional, default is 20" << endl;
   cerr << "[--max-shift-distance|-d] maximum shift distance, optional, default is 50 tokens" << endl;
   cerr << "[--match-cost|-M] cost for matching, default is 0" << endl;
   cerr << "[--delete-cost|-D] cost for deleting, default is 1" << endl;
@@ -42,6 +43,7 @@ static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"print", no_argument, 0, 'p'},
                                        {"alignment", no_argument, 0, 'a'},
                                        {"wmt", no_argument, 0, 'w'},
+                                       {"beam-width", required_argument, 0, 'b'},
                                        {"max-shift-distance", required_argument, 0, 'd'},
                                        {"match-cost", required_argument, 0, 'M'},
                                        {"delete-cost", required_argument, 0, 'D'},
@@ -60,6 +62,7 @@ struct ProgramOption {
   bool tokenize{false};
   bool print{false};
 
+  int beamWidth{20};
   int maxShiftDistance{50};
   int matchCost{0};
   int deleteCost{1};
@@ -73,7 +76,7 @@ struct ProgramOption {
 void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
   int c;
   int option_index;
-  while((c = getopt_long(argc, argv, "awicthpd:M:D:B:I:T:", long_options, &option_index)) != -1) {
+  while((c = getopt_long(argc, argv, "awicthpb:d:M:D:B:I:T:", long_options, &option_index)) != -1) {
     switch(c) {
       case 'a': opt->printAlignment = true; break;
       case 'w': opt->printAlignmentWMT = true; break;
@@ -81,6 +84,7 @@ void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
       case 'c': opt->clampScore = true; break;
       case 't': opt->tokenize = true; break;
       case 'p': opt->print = true; break;
+      case 'b': opt->beamWidth = std::atoi(optarg); break;
       case 'd': opt->maxShiftDistance = std::atoi(optarg); break;
       case 'M': opt->matchCost = std::atoi(optarg); break;
       case 'D': opt->deleteCost = std::atoi(optarg); break;
@@ -144,13 +148,17 @@ int main(int argc, char** argv) {
 
   try {
     std::string line;
-    TER::terCalc ter(option.maxShiftDistance, option.matchCost, option.deleteCost, 
+    TER::terCalc ter(option.beamWidth,
+                     option.maxShiftDistance, option.matchCost, option.deleteCost, 
                      option.substituteCost, option.insertCost, option.shiftCost);
 
     while(std::getline(std::cin, line)) {
       std::vector<std::string> fields;
       mt::split(line, '\t', fields);
       std::vector<std::string> hyp, ref;
+
+      if(fields.size() != 2)
+        throw std::runtime_error("Input seems to have too few or to many tab-separated fields");
 
       if(option.tokenize) {
         fields[0] = tokenize(fields[0]);
@@ -159,6 +167,12 @@ int main(int argc, char** argv) {
 
       mt::split(fields[0], ' ', hyp);
       mt::split(fields[1], ' ', ref);
+
+      if(hyp.empty())
+        throw std::runtime_error("Hypothesis is empty");
+      
+      if(ref.empty())
+        throw std::runtime_error("Reference is empty");
 
       TER::terAlignment result = ter.TER(hyp, ref);
 

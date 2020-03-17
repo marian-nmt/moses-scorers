@@ -34,7 +34,7 @@ using namespace std;
 using namespace TERCPPNS_Tools;
 namespace TERCPPNS_TERCpp {
 
-terCalc::terCalc(int maxShiftDistance, int matchCost, int deleteCost, int substituteCost, int insertCost, int shiftCost) {
+terCalc::terCalc(int beamWidth, int maxShiftDistance, int matchCost, int deleteCost, int substituteCost, int insertCost, int shiftCost) {
   TAILLE_PERMUT_MAX = 10;
   NBR_PERMUT_MAX = 10;
   infinite = 99999.0;
@@ -46,7 +46,7 @@ terCalc::terCalc(int maxShiftDistance, int matchCost, int deleteCost, int substi
   NBR_SEGS_EVALUATED = 0;
   NBR_PERMUTS_CONSID = 0;
   NBR_BS_APPELS = 0;
-  TAILLE_BEAM = 10;
+  TAILLE_BEAM = beamWidth;
   DIST_MAX_PERMUT = maxShiftDistance;
   PRINT_DEBUG = false;
   CALL_TER_ALIGN = 0;

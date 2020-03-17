@@ -78,7 +78,13 @@ private:
   int TAILLE_BEAM;
 
 public:
-  terCalc(int maxShiftDistance = 50, int matchCost = 0, int deleteCost = 1, int substituteCost = 1, int insertCost = 1, int shiftCost = 1);
+  terCalc(int beamWidth = 20, 
+          int maxShiftDistance = 50, 
+          int matchCost = 0, 
+          int deleteCost = 1, 
+          int substituteCost = 1, 
+          int insertCost = 1, 
+          int shiftCost = 1);
 
   ~terCalc();
   //             size_t* hashVec ( std::vector<std::string> s );
