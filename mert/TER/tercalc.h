@@ -63,6 +63,13 @@ private:
   int MAX_LENGTH_SENTENCE;
   bool PRINT_DEBUG;
 
+  int shift_cost;
+  int insert_cost;
+  int delete_cost;
+  int substitute_cost;
+  int match_cost;
+  double infinite;
+
   // Utilisés dans minDistEdit et ils ne sont pas réajustés
   std::vector<std::vector<double> >* S;
   std::vector<std::vector<char> >* P;
@@ -71,13 +78,7 @@ private:
   int TAILLE_BEAM;
 
 public:
-  int shift_cost;
-  int insert_cost;
-  int delete_cost;
-  int substitute_cost;
-  int match_cost;
-  double infinite;
-  terCalc();
+  terCalc(int maxShiftDistance = 50, int matchCost = 0, int deleteCost = 1, int substituteCost = 1, int insertCost = 1, int shiftCost = 1);
 
   ~terCalc();
   //             size_t* hashVec ( std::vector<std::string> s );

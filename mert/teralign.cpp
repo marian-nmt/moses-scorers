@@ -21,10 +21,20 @@ void usage() {
   cerr << "[--print|-p] print (tokenized) inputs" << endl;
   cerr << "[--alignment|-a] print full alignment" << endl;
   cerr << "[--wmt|-w] output OK/BAD tags a la WMT QE task (1-to-1 with cand tokens)" << endl;
+  cerr << "[--max-shift-distance|-d] maximum shift distance, optional, default is 50 tokens" << endl;
+  cerr << "[--match-cost|-M] cost for matching, default is 0" << endl;
+  cerr << "[--delete-cost|-D] cost for deleting, default is 1" << endl;
+  cerr << "[--substitute-cost|-B] cost for substituting, default is 1" << endl;
+  cerr << "[--insert-cost|-I] cost for inserting, default is 1" << endl;
+  cerr << "[--shift-cost|-T] cost for shifting, default is 1" << endl;
   cerr << "[--help|-h] print this message and exit" << endl;
   cerr << endl;
   exit(1);
 }
+
+//  java -jar tercom.jar [-N] [-s] [-P] -r ref -h hyp [-a alter_ref] [-b beam_width]
+// [-S trans_span_prefix] [-o out_format -n out_pefix] [-d max_shift_distance] 
+// [-M match_cost] [-D delete_cost] [-B substitute_cost] [-I insert_cost] [-T shift_cost]
 
 static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"clamp", no_argument, 0, 'c'},
@@ -32,6 +42,12 @@ static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"print", no_argument, 0, 'p'},
                                        {"alignment", no_argument, 0, 'a'},
                                        {"wmt", no_argument, 0, 'w'},
+                                       {"max-shift-distance", required_argument, 0, 'd'},
+                                       {"match-cost", required_argument, 0, 'M'},
+                                       {"delete-cost", required_argument, 0, 'D'},
+                                       {"substitute-cost", required_argument, 0, 'B'},
+                                       {"insert-cost", required_argument, 0, 'I'},
+                                       {"shift-cost", required_argument, 0, 'T'},
                                        {"help", no_argument, 0, 'h'},
                                        {0, 0, 0, 0}};
 
@@ -43,14 +59,21 @@ struct ProgramOption {
   bool clampScore{false};
   bool tokenize{false};
   bool print{false};
-  
+
+  int maxShiftDistance{50};
+  int matchCost{0};
+  int deleteCost{1};
+  int substituteCost{1};
+  int insertCost{1};
+  int shiftCost{1};
+
   ProgramOption() {}
 };
 
 void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
   int c;
   int option_index;
-  while((c = getopt_long(argc, argv, "awicthp", long_options, &option_index)) != -1) {
+  while((c = getopt_long(argc, argv, "awicthpd:M:D:B:I:T:", long_options, &option_index)) != -1) {
     switch(c) {
       case 'a': opt->printAlignment = true; break;
       case 'w': opt->printAlignmentWMT = true; break;
@@ -58,6 +81,13 @@ void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
       case 'c': opt->clampScore = true; break;
       case 't': opt->tokenize = true; break;
       case 'p': opt->print = true; break;
+      case 'd': opt->maxShiftDistance = std::atoi(optarg); break;
+      case 'M': opt->matchCost = std::atoi(optarg); break;
+      case 'D': opt->deleteCost = std::atoi(optarg); break;
+      case 'B': opt->substituteCost = std::atoi(optarg); break;
+      case 'I': opt->insertCost = std::atoi(optarg); break;
+      case 'T': opt->shiftCost = std::atoi(optarg); break;
+
       default: usage();
     }
   }
@@ -114,7 +144,9 @@ int main(int argc, char** argv) {
 
   try {
     std::string line;
-    TER::terCalc ter;
+    TER::terCalc ter(option.maxShiftDistance, option.matchCost, option.deleteCost, 
+                     option.substituteCost, option.insertCost, option.shiftCost);
+
     while(std::getline(std::cin, line)) {
       std::vector<std::string> fields;
       mt::split(line, '\t', fields);

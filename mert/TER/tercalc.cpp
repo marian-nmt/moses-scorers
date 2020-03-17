@@ -34,27 +34,29 @@ using namespace std;
 using namespace TERCPPNS_Tools;
 namespace TERCPPNS_TERCpp {
 
-terCalc::terCalc() {
+terCalc::terCalc(int maxShiftDistance, int matchCost, int deleteCost, int substituteCost, int insertCost, int shiftCost) {
   TAILLE_PERMUT_MAX = 10;
   NBR_PERMUT_MAX = 10;
   infinite = 99999.0;
-  shift_cost = 1.0;
-  insert_cost = 1.0;
-  delete_cost = 1.0;
-  substitute_cost = 1.0;
-  match_cost = 0.0;
+  shift_cost = shiftCost;
+  insert_cost = insertCost;
+  delete_cost = deleteCost;
+  substitute_cost = substituteCost;
+  match_cost = matchCost;
   NBR_SEGS_EVALUATED = 0;
   NBR_PERMUTS_CONSID = 0;
   NBR_BS_APPELS = 0;
   TAILLE_BEAM = 10;
-  DIST_MAX_PERMUT = 25;
+  DIST_MAX_PERMUT = maxShiftDistance;
   PRINT_DEBUG = false;
-  hypSpans.clear();
-  refSpans.clear();
   CALL_TER_ALIGN = 0;
   CALL_CALC_PERMUT = 0;
   CALL_FIND_BSHIFT = 0;
   MAX_LENGTH_SENTENCE = 10;
+
+  hypSpans.clear();
+  refSpans.clear();
+
   S = new vector<vector<double> >(MAX_LENGTH_SENTENCE,
                                   std::vector<double>(MAX_LENGTH_SENTENCE, 0.0));
   P = new vector<vector<char> >(MAX_LENGTH_SENTENCE, std::vector<char>(MAX_LENGTH_SENTENCE, ' '));
