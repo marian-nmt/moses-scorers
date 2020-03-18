@@ -29,16 +29,12 @@ void usage() {
   cerr << "[--substitute-cost|-B] cost for substituting, default is 1" << endl;
   cerr << "[--insert-cost|-I] cost for inserting, default is 1" << endl;
   cerr << "[--shift-cost|-T] cost for shifting, default is 1" << endl;
-  cerr << "[--wmt17|-7] print WMT17 style OK/BAD tags with no shifting and beam-width 20" << endl;
-  cerr << "[--wmt18|-8] print WMT18 style OK/BAD tags with no shifting, beam-width 20 and gap tags" << endl;
+  cerr << "[--wmt17|-7] print WMT17 style OK/BAD tags with no shifting and beam-width 20 (-w -b20 -d0)" << endl;
+  cerr << "[--wmt18|-8] print WMT18 style OK/BAD tags with no shifting, beam-width 20 and gap tags (-wg -b20 -d0)" << endl;
   cerr << "[--help|-h] print this message and exit" << endl;
   cerr << endl;
   exit(1);
 }
-
-//  java -jar tercom.jar [-N] [-s] [-P] -r ref -h hyp [-a alter_ref] [-b beam_width]
-// [-S trans_span_prefix] [-o out_format -n out_pefix] [-d max_shift_distance] 
-// [-M match_cost] [-D delete_cost] [-B substitute_cost] [-I insert_cost] [-T shift_cost]
 
 static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"clamp", no_argument, 0, 'c'},
