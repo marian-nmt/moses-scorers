@@ -20,7 +20,7 @@ void usage() {
   cerr << "[--tokenize|-t] tokenize inputs sacrebleu-style" << endl;
   cerr << "[--print|-p] print (tokenized) inputs" << endl;
   cerr << "[--alignment|-a] print full alignment" << endl;
-  cerr << "[--wmt|-w] output OK/BAD tags a la WMT QE task (1-to-1 with cand tokens)" << endl;
+  cerr << "[--ok-bad|-w] output OK/BAD tags a la WMT QE task (1-to-1 with cand tokens)" << endl;
   cerr << "[--gaps|-g] add WMT18-style gap tokens" << endl;
   cerr << "[--beam-width|-b] beam width, optional, default is 20" << endl;
   cerr << "[--max-shift-distance|-d] maximum shift distance, optional, default is 50 tokens" << endl;
@@ -29,6 +29,8 @@ void usage() {
   cerr << "[--substitute-cost|-B] cost for substituting, default is 1" << endl;
   cerr << "[--insert-cost|-I] cost for inserting, default is 1" << endl;
   cerr << "[--shift-cost|-T] cost for shifting, default is 1" << endl;
+  cerr << "[--wmt17|-7] print WMT17 style OK/BAD tags with no shifting and beam-width 20" << endl;
+  cerr << "[--wmt18|-8] print WMT18 style OK/BAD tags with no shifting, beam-width 20 and gap tags" << endl;
   cerr << "[--help|-h] print this message and exit" << endl;
   cerr << endl;
   exit(1);
@@ -43,7 +45,7 @@ static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"tokenize", no_argument, 0, 't'},
                                        {"print", no_argument, 0, 'p'},
                                        {"alignment", no_argument, 0, 'a'},
-                                       {"wmt", no_argument, 0, 'w'},
+                                       {"ok-bad", no_argument, 0, 'w'},
                                        {"gaps", no_argument, 0, 'g'},
                                        {"beam-width", required_argument, 0, 'b'},
                                        {"max-shift-distance", required_argument, 0, 'd'},
@@ -52,13 +54,15 @@ static struct option long_options[] = {{"invert", no_argument, 0, 'i'},
                                        {"substitute-cost", required_argument, 0, 'B'},
                                        {"insert-cost", required_argument, 0, 'I'},
                                        {"shift-cost", required_argument, 0, 'T'},
+                                       {"wmt17", no_argument, 0, '7'},
+                                       {"wmt18", no_argument, 0, '8'},
                                        {"help", no_argument, 0, 'h'},
                                        {0, 0, 0, 0}};
 
 // Options used in evaluator.
 struct ProgramOption {
   bool printAlignment{false};
-  bool printAlignmentWMT{false};
+  bool printOkBad{false};
   bool negateScore{false};
   bool clampScore{false};
   bool tokenize{false};
@@ -79,10 +83,10 @@ struct ProgramOption {
 void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
   int c;
   int option_index;
-  while((c = getopt_long(argc, argv, "awgicthpb:d:M:D:B:I:T:", long_options, &option_index)) != -1) {
+  while((c = getopt_long(argc, argv, "awgicthp78b:d:M:D:B:I:T:", long_options, &option_index)) != -1) {
     switch(c) {
       case 'a': opt->printAlignment = true; break;
-      case 'w': opt->printAlignmentWMT = true; break;
+      case 'w': opt->printOkBad = true; break;
       case 'g': opt->gaps = true; break;
       case 'i': opt->negateScore = true; break;
       case 'c': opt->clampScore = true; break;
@@ -95,6 +99,19 @@ void ParseCommandOptions(int argc, char** argv, ProgramOption* opt) {
       case 'B': opt->substituteCost = std::atoi(optarg); break;
       case 'I': opt->insertCost = std::atoi(optarg); break;
       case 'T': opt->shiftCost = std::atoi(optarg); break;
+
+      case '7': 
+        opt->printOkBad = true; 
+        opt->maxShiftDistance = 0;
+        opt->beamWidth = 20;
+        break;
+
+      case '8': 
+        opt->printOkBad = true; 
+        opt->maxShiftDistance = 0;
+        opt->beamWidth = 20;
+        opt->gaps = true;
+        break;
 
       default: usage();
     }
@@ -193,8 +210,8 @@ int main(int argc, char** argv) {
       std::cout << std::fixed << std::setprecision(4);
       std::cout << score;
       
-      if(option.printAlignment || option.printAlignmentWMT) {
-        if(option.printAlignmentWMT)
+      if(option.printAlignment || option.printOkBad) {
+        if(option.printOkBad)
           std::cout << "\t" << alignment2tags(result, option.gaps);
         else
           std::cout << "\t" << result.printAlignments();
