@@ -16,7 +16,7 @@ then example usage via
 
 and for sentence-level TER (with optional alignments)
 
-    paste cand reference | ./teralign -icw
+    paste cand reference | ./teralign -ic --wmt17
 
 which results in WMT-QE-task-style output (with 1-TER, clamped to 0-1 range):
 
@@ -25,3 +25,7 @@ which results in WMT-QE-task-style output (with 1-TER, clamped to 0-1 range):
 0.7778  OK OK OK OK OK OK OK BAD
 0.8571  OK OK OK OK BAD OK OK
 ```
+
+Using `--wmt18` will also add the gap symbols introduced for WMT18. We are working on adding the source word tags:
+
+    paste cand reference | ./teralign -ic --wmt18
