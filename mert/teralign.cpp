@@ -136,12 +136,21 @@ static std::string tokenize(const std::string& text) {
   normText = regex::regex_replace(normText, regex::regex("([^0-9])([\\.,])"), "$1 $2 "); // tokenize period and comma unless preceded by a digit
   normText = regex::regex_replace(normText, regex::regex("([\\.,])([^0-9])"), " $1 $2"); // tokenize period and comma unless followed by a digit
   normText = regex::regex_replace(normText, regex::regex("([0-9])(-)"), "$1 $2 ");       // tokenize dash when preceded by a digit
+
+  return normText;
+}
+
+static std::string normalize(const std::string& text) {
+  std::string normText = text;
+  namespace regex = std;
+
   normText = regex::regex_replace(normText, regex::regex("\\s+"), " "); // one space only between words
   normText = regex::regex_replace(normText, regex::regex("^\\s+"), ""); // no leading space
   normText = regex::regex_replace(normText, regex::regex("\\s+$"), ""); // no trailing space
 
   return normText;
 }
+
 
 static inline std::string alignment2tags(const TER::terAlignment& aln, bool hasGaps) {
   std::stringstream tags;
@@ -186,6 +195,8 @@ int main(int argc, char** argv) {
         fields[1] = tokenize(fields[1]);
       }
 
+      fields[0] = normalize(fields[0]);
+      fields[1] = normalize(fields[1]);
       mt::split(fields[0], ' ', hyp);
       mt::split(fields[1], ' ', ref);
 
